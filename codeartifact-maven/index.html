@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>CodeArtifact+Maven Idea plugin</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+ <link rel="stylesheet" type="text/css" href="../css/global.css">
+ <meta name="Description" content="CodeArtifact - Maven idea plugin">
+ <meta name="Keywords" content="CodeArtifact mvn idea plugin">
+
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../css/menu.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../index.htm">Blog</a></li><li class="group"><a href="#" class="justtext">Java</a><ul class="navlist"><li class="active"><a href="#">AWS+Maven</a></li><li class="group"><a href="../openapi4aws/index.htm">OpenAPI4AWS</a></li><li class="group"><a href="../tablefilter/index.html">Table filter</a></li><li><a href="../idldepend/index.htm">IdlDepend</a></li><li class="group"><a href="../virtualnet/index.htm">VirtualNet</a></li><li><a href="../virtualnet2/index.htm">VirtualNet2</a></li><li><a href="../phd/index.htm">Sensei</a></li><li><a href="../cmdlinker/index.htm">CmdLinker</a></li><li><a href="../filesplit/index.htm">FileSplit</a></li><li><a href="../glassedpane/index.html">GlassedPane</a></li><li><a href="../menu/index.htm">Menu Applet</a></li><li><a href="../splitimage/index.htm">SplitImage</a></li></ul></li><li class="group"><a href="../python/openapi4aws/index.htm">python</a></li><li class="group"><a href="../csharp/xmlobjects/index.htm">c#</a></li><li class="group"><a href="../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="../cloud/aws/mfa/index.html">net + cloud</a></li><li class="group"><a href="../linux/debian/troubleshooting.htm">Linux</a></li><li class="group"><a href="../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="../howto/osx/nginx.html">Os X</a></li><li class="group"><a href="../phd/index.htm">PhD</a></li><li class="group"><a href="../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+
+<p class="timestamp">9th May 2021</p>
+ <h1>CodeArtifact+Maven Idea plugin</h1>
+     <img src="./icon.svg" class="right" width="180px" height="180px">
+
+  <p><b>Idea plugin</b>: <a href="https://plugins.jetbrains.com/plugin/16777-aws-codeartifact--maven">https://plugins.jetbrains.com/plugin/16777-aws-codeartifact--maven</a></p>
+  <p><b>Source: Github</b>: <a href="https://github.com/coderazzi/aws_codeartifact_maven">https://github.com/coderazzi/aws_codeartifact_maven</a></p>
+
+  <p>This plugin facilitates accessing and deploying artifacts in CodeArtifact on Maven Intellij Idea projects.</p>
+
+  <p>AWS provides very specific <a href="https://docs.aws.amazon.com/codeartifact/latest/ug/maven-mvn.html">instructions</a>
+   to setup Maven to support AWS CodeArtifact. Basically, your file ~/.m2/settings.xml must include a server
+   specification such as:</p>
+  <pre>&lt;settings&gt;
+   &lt;servers&gt;
+    &lt;server&gt;
+     &lt;id&gtcoderazzi-project-yz&lt/id&gt;
+     &lt;username&gtaws&lt/username&gt;
+     &lt;password&gt${env.CODEARTIFACT_AUTH_TOKEN}&lt/password&gt;
+    &lt;/server&gt;
+   &lt;/servers&gt;
+&lt;/settings&gt;
+  </pre>
+
+  <p>The token CODEARTIFACT_AUTH_TOKEN needs to be refreshed every 12 hours (by default) by doing:</p>
+  <pre>export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain DOMAIN \
+      --domain-owner DOMAIN_OWNER --query authorizationToken --output text`</pre>
+
+  <p>After issuing the previous command, the environment that executes the command has authorized access to CodeCommit</p>
+
+  <p>The main problem here is that when using an IDE like IDEA, you would need to update the CODEARTIFACT_AUTH_TOKEN
+   environment variable and then launch the IDE. And as the token needs to be refreshed, it is needed to quit the
+   IDE and repeat the process every 12 hours. Plus, it is needed to update the environment variable in the same
+   environment where the IDE is launched, quite inconvenient if launching the IDE from anywhere except the command line.
+  </p>
+
+  <p>Idea allows to setup environment variables for MVN execution
+   (under Settings/Build/Execution/Deployment/Build Tools/Maven/Runner),
+   but this would imply to manually obtaining the token and updating the setting periodically.</p>
+
+  <p>A better option for this specific scenario is to automatically update the password in ~/.m2/settings.xml,
+   to reflect the real token. That is, the settings file will look like:</p>
+  <pre>&lt;settings&gt;
+   &lt;servers&gt;
+    &lt;server&gt;
+     &lt;id&gtcoderazzi-project-yz&lt/id&gt;
+     &lt;username&gtaws&lt/username&gt;
+     &lt;password&gtREAL_CREDENTIALS_OBTAINED_FROM_AWS&lt/password&gt;
+    &lt;/server&gt;
+   &lt;/servers&gt;
+&lt;/settings&gt;
+  </pre>
+
+  <p><b>CodeArtifact-Maven Idea plugin</b> does exactly this simple task. Note that there is a AWS-supported
+  AWS plugin, but it does not cover getting credentials for CodeArtifact</p>
+
+ <h2>Installation</h2>
+
+     <p>The <a href="https://plugins.jetbrains.com/plugin/16777-aws-codeartifact--maven">plugin</a>
+         is available in Intellij Idea public plugin repository, as CodeArtifact+Maven.</p>
+
+ <h2>Usage</h2>
+
+  <p>After installation, a menu entry appear under Tools: <b>Generate AWS CodeArtifact credentials for Maven</b></p>
+
+  <p>When selected, a window appears to enter the required details:</p>
+  <img class="centered" src="window-4-0-2.png" width="800px">
+  <ul>
+   <li><b>Domain</b>: the domain in AWS</li>
+   <li><b>Domain Owner</b>: the account owner, something like 023174738914</li>
+   <li><b>Maven server id:</b> the server name provided in your maven settings file -as following the instructions from AWS-.
+       Starting on version 2.0, this is a dropdown menu, pre-filled with the values obtained from the maven settings file:
+       it extracts all the servers where the username is <b>aws</b>
+   </li>
+  <li><b>AWS profile</b>: the profile to use to obtain the credentials, obtained from any of the files
+      &lt;USER-HOME&gt;/.aws/config, &lt;USER-HOME&gt;/.aws/credentials, &lt;AWS_CONFIG_FILE&gt;,
+      &lt;AWS_SHARED_CREDENTIALS_FILE&gt;</li>
+   <li><b>Region</b>: the target region. If specified, it overrides the region given by the profile -if any-</li>
+   <li><b>Maven settings file</b>: the location of the maven settings file, usually under ~/.m2</li>
+
+   <li><b>AWS cli path</b>: the location of the aws executable, can be specified as aws if it can be found in the path</li>
+  </ul>
+
+     <p> The first five settings above can be defined multiple times, using different configurations.
+         A configuration is defined using the fields:</p>
+     <ul>
+         <li><b>Configuration</b>: any unique non, empty name provided by the user.</li>
+         <li><b>Enabled</b>: Whether to use this configuration when generating multiple tokens at once.</li>
+     </ul>
+
+     <p>The button <b>Generate Auth Token</b> will initiate the requests of a token to AWS and
+         its inclusion in the maven settings file.
+         If there are multiple configurations defined, the user can update the state of the checkbox
+         <b>Generate Tokens for all configurations</b>; if selected, a token will be generated for each
+         enabled configuration.</p>
+
+     <h2>MFA support</h2>
+
+     <p>From version 3.0.0, the plugin includes support for MFA, prompting the user to enter the MFA token if required.<p>
+     <p>Currently, only MFA based on roles is supported, where the chosen profile identifies a IAM role, not a IAM user.<br>
+         For more information on the distinction between role-based-MFA and user-based-MFA, check
+         <a href="https://coderazzi.net/cloud/aws/mfa">https://coderazzi.net/cloud/aws/mfa</a></p>
+
+
+     <h2>SSO support</h2>
+
+     <p>From version 4.1.0, the plugin includes support for SSO.<p>
+     <p>If a token request appears during the token generation, the plugin will start automatically the SSO login procedure.</p>
+     <p>The AWS cli displays then a URL, where the user will enter his SSO credentials, and a security code.
+         The OS will automatically open the URL in the default browser, and will present the same security code.</p>
+     <p>These operations happen automatically in the background, the plugin generation's window will only display
+         this security code:</p>
+
+     <img class="centered" src="detail-sso-4-1-0.png" width="800px">
+
+     <p>
+         From that moment, the browser's UI handles the whole process, with as many attempts from the
+         user as required. This can end with success, or with a timeout, although the user can cancel
+         the plugin' progress at any moment
+     </p>
+
+     <h2>Versions</h2>
+     <ul>
+         <li>Version 4.1.1 : 16th Dec 2024: Display SSO info in separate message.
+             Use AWS path for SSO login as defined in the configuration window</li>
+         <li>Version 4.1.0 : 14th Dec 2024: SSO support</li>
+         <li>Version 4.0.2 : 05th Dec 2024: Improved documentation, released as non beta</li>
+         <li>Version 4.0.1 : 18th Nov 2024: Handle properly a generation dialog too big</li>
+         <li>Version 4.0.0 : 17th Nov 2024: Support multiple repositories at once</li>
+         <li>Version 3.3.2 : 16th Nov 2024: Revert partially changes in version 3.3.1, MFA and reload
+             *                         of profiles / maven server ids not working on 3.3.1</li>
+         <li>Version 3.3.1 : 14th Nov 2024: Make plugin compatible with latest IDE version (2024.3).
+             It solves an exception requesting that Access is allowed from write thread only</li>
+         <li>Version 3.3.0 : 03rd May 2024: Make plugin compatible with latest IDE version (2024.1)</li>
+         <li>Version 3.2.4 : 08th Dec 2023: Make plugin compatible with latest IDE version (2023.3)</li>
+         <li>Version 3.2.3 : 19th Sep 2023: Bug using default region for profiles without configured region</li>
+         <li>Version 3.2.2 : 29th Jul 2023: SVG correction by Sergio (sfgvieira)</li>
+         <li>Version 3.2.1 : 28th Jul 2023: Final solution to avoid exception due to change on internal SVGLoader</li>
+         <li>Version 3.2.0 : 27th Jul 2023: Quick patch to avoid exception due to change on internal SVGLoader</li>
+         <li>Version 3.1.0 : 21st Apr 2023: User can optionally specify the target region</li>
+         <li>Version 3.0.0 : 04th Dec 2022: Added support for MFA (role based)</li>
+         <li>Version 2.2.0 : 30th Oct 2022: Added hint in case of missing region configuration (<a href="https://github.com/coderazzi/aws_codeartifact_maven/issues/8">issue #8</a> in Github).</li>
+         <li>Version 2.1.1 : 29th Jan 2022: if profile is default, do not include it when getting credentials.</li>
+         <li>Version 2.1.0 : 27th Jan 2022: Added AWS profile management.</li>
+         <li>Version 2.0.1 : 27th Nov 2021: Removed use of deprecated API, improved dialog layout.</li>
+         <li>Version 2.0.0 : 24th Nov 2021: Changed GUI to use dropdowns with serverIds extracted from maven settings file.</li>
+         <li>Version 1.1.1 : 23rd Sep 2021: solved bug: "Do not request resource from classloader using path with leading slash".</li>
+         <li>Version 1.1.0 : 19th Sep 2021: proper implementation of Cancel button.</li>
+         <li>Version 1.0.5 : 13th May 2021: corrected html tags on plugin description and readme.md files</li>
+         <li>Version 1.0.4 : 12th May 2021: removed missing image from plugin description.</li>
+         <li>Version 1.0.3 : 11th May 2021: compiled with JDK.</li>
+         <li>Version 1.0.2 : 10th May 2021: changed name to prefix it with AWS, to facilitate searches.</li>
+         <li>Version 1.0.1 : 10th May 2021: added AWS cli path</li>
+     </ul>
+
+ </div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+ </div>
+ <script type="text/javascript" src="../js/coderazzi.js"></script>
+</body>
+</html>

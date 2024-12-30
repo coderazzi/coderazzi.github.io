@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Listening on Debian on ssh on different port</title>
+ <link rel="stylesheet" type="text/css" href="../../css/global.css">
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+ <meta name="Keywords" content="SSH port">
+
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../../css/menu.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../../index.htm">Blog</a></li><li class="group"><a href="../../codeartifact-maven/index.htm">Java</a></li><li class="group"><a href="../../python/openapi4aws/index.htm">python</a></li><li class="group"><a href="../../csharp/xmlobjects/index.htm">c#</a></li><li class="group"><a href="../../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="#" class="justtext">net + cloud</a><ul class="navlist"><li class="group"><a href="../../cloud/aws/mfa/index.html">AWS</a></li><li class="group"><a href="../../cloud/kubernetes/kubegres/index.html">Kubernetes</a></li><li class="group"><a href="#" class="justtext">SSH</a><ul class="navlist"><li><a href="ssh_2factorauth.html">Two factor authentication</a></li><li><a href="ssh_svn.html">Serving SVN on SSH</a></li><li class="active"><a href="#">SSH daemon on different port</a></li><li><a href="ssh_keys.html">Using SSH keys</a></li></ul></li><li class="group"><a href="../openwrt/tl841n/index.htm">OpenWRT</a></li></ul></li><li class="group"><a href="../../linux/debian/troubleshooting.htm">Linux</a></li><li class="group"><a href="../../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="../osx/nginx.html">Os X</a></li><li class="group"><a href="../../phd/index.htm">PhD</a></li><li class="group"><a href="../../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+
+<p class="timestamp">18th July 2015</p>
+	 <h1>Debian: additional SSH port</h1>
+
+<p>I am totally sold to the explanations on why putting SSH on any other port than 22 is a 
+	<a href="https://www.adayinthelifeof.nl/2012/03/12/why-putting-ssh-on-another-port-than-22-is-bad-idea/">bad idea</a>
+	but it is my experience that keeping enabled the port 22 is asking for problems. It can be restricted to explicit IP
+	addresses, etc, but, otherwise, changing the port seems a sound idea. Mind you, it is probably just discarding 
+	the unexperienced vector attacks, but even so, unless you are the unique user in that machine and keep a good 
+	password policy, a vector attack can eventually score, so disabling the port 22 and moving anywhere else can indeed
+	help.</p>
+
+<p>In Debian Jessie (8.x), it is just needed to link the ssh daemon itself and ensure that the configuration files for the
+	duplicated daemon are in place; the following procedure does not remove the access to port 22, it is your responsibility to 
+	disable it or to enhance its security (like limiting inbound IPs, etc). What this procedure does is adding a secondary
+	daemon listening on a secondary port:</p>
+
+
+<pre>
+ln -sf /usr/sbin/sshd /usr/sbin/ssh2d
+
+cp /etc/pam.d/sshd /etc/pam.d/ssh2d
+
+sed -e s/ssh/ssh2/g /etc/init.d/ssh | sed -e s^etc/ssh2^etc/ssh^g > /etc/init.d/ssh2
+
+cp /etc/default/ssh /etc/default/ssh2
+
+cp /etc/ssh/sshd_config /etc/ssh/ssh2d_config
+</pre>
+
+  <p>It is needed now to ensure that the linked daemon (/usr/bin/ssh2d) uses the proper configuration file:</p>
+
+ <pre>vi /etc/default/ssh2
+    # ensure that the line with SSHD_OPTS is extended to contain:
+    SSHD_OPTS='-f /etc/ssh/ssh2d_config -o PidFile=/var/run/ssh2d.pid'
+ </pre>
+
+   <p>Now, change the port in the configuration file <b>/etc/ssh/ssh2d_config</b>:</p>
+
+ <pre>vi /etc/ssh/ssh2d_config
+	# look for line Port 22, and replace it with Port XXXX
+	# look, if any, for line including PermitRootLogin and 
+	# add it, if not found, or edit it, 
+	# to contain PermitRootLogin=no
+</pre>
+
+	<p>Time now to enable the new SSH service, listening on a separate port:</p>
+
+<pre>systemctl enable ssh2
+systemctl start ssh2</pre>
+	
+
+</div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+ </div>
+ <script type="text/javascript" src="../../js/coderazzi.js"></script>
+</body>
+</html>

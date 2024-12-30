@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>VirtualNet: network simulation with JavaRMI.
+ Packages</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+ <link rel="stylesheet" type="text/css" href="../css/global.css">
+ <meta name="Description" content="VirtualNet">
+ <meta name="Keywords" content="java RMI network simulation">
+
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../css/menu.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../index.htm">Blog</a></li><li class="group"><a href="#" class="justtext">Java</a><ul class="navlist"><li><a href="../codeartifact-maven/index.htm">AWS+Maven</a></li><li class="group"><a href="../openapi4aws/index.htm">OpenAPI4AWS</a></li><li class="group"><a href="../tablefilter/index.html">Table filter</a></li><li><a href="../idldepend/index.htm">IdlDepend</a></li><li class="group"><a href="#" class="justtext">VirtualNet</a><ul class="navlist"><li><a href="index.htm">Overview</a></li><li><a href="availability.htm">Availability</a></li><li class="active"><a href="#">Packages</a></li><li><a href="interface.htm">Interface</a></li><li><a href="localExample.htm">Local example</a></li><li><a href="rmiExample.htm">RMI example</a></li><li><a href="executables.htm">Executables</a></li><li><a href="versions.htm">Versions</a></li></ul></li><li><a href="../virtualnet2/index.htm">VirtualNet2</a></li><li><a href="../phd/index.htm">Sensei</a></li><li><a href="../cmdlinker/index.htm">CmdLinker</a></li><li><a href="../filesplit/index.htm">FileSplit</a></li><li><a href="../glassedpane/index.html">GlassedPane</a></li><li><a href="../menu/index.htm">Menu Applet</a></li><li><a href="../splitimage/index.htm">SplitImage</a></li></ul></li><li class="group"><a href="../python/openapi4aws/index.htm">python</a></li><li class="group"><a href="../csharp/xmlobjects/index.htm">c#</a></li><li class="group"><a href="../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="../cloud/aws/mfa/index.html">net + cloud</a></li><li class="group"><a href="../linux/debian/troubleshooting.htm">Linux</a></li><li class="group"><a href="../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="../howto/osx/nginx.html">Os X</a></li><li class="group"><a href="../phd/index.htm">PhD</a></li><li class="group"><a href="../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+<p class="timestamp">14th August 1997</p>
+<h1>VirtualNet (over RMI)</h1>
+ <h2>Packages</h2>
+
+ <p>There are five packages in Virtual Net:</p>
+
+ <ul type="square">
+  <li><a href="#vnet">vnet</a></li>
+
+  <li><a href="#display">vnet.display</a></li>
+
+  <li><a href="#local">vnet.local</a></li>
+
+  <li><a href="#remote">vnet.remote</a></li>
+
+  <li><a href="#prg">vnet.remote.prg</a></li>
+ </ul>
+
+ <h3><a name="vnet" id="vnet">package vnet;</a></h3>
+
+ <p>This is the implementation of the basic net layout.</p>
+
+ <h3><a name="display" id="display">package vnet.display;</a></h3>
+
+ <p>Classes that can be used for a graphical display of the net
+ (its graph), of the events in the virtual net, or just a list of
+ binded servers.</p>
+
+ <h3><a name="local" id="local">package vnet.local;</a></h3>
+
+ <p>Here are the classes to develop a local client/server
+ application, that is, the virtual net, the clients and the servers
+ are all of them being executed in the same virtual machine.</p>
+
+ <h3><a name="remote" id="remote">package vnet.remote;</a></h3>
+
+ <p>Here are the classes to develop a remote client/server
+ application using RMI; that is, the clients, the servers and the
+ virtual net can be being executed in different java sessions,
+ communicating between them using RMI.</p>
+
+ <h3><a name="prg" id="prg">package vnet.remote.prg;</a></h3>
+
+ <p>With this package it is possible to execute a Virtual Net
+ program (only for the package remote, of course).</p>
+ </div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+ </div>
+ <script type="text/javascript" src="../js/coderazzi.js"></script>
+</body>
+</html>

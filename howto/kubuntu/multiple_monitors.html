@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Setup multiple monitors under Kubuntu</title>
+ <link rel="stylesheet" type="text/css" href="../../css/global.css">
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+ <meta name="Keywords" content="Kubuntu Nvidia multiple monitors">
+ <meta name="Author" content="Luis M. Pena">
+
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../../css/menu.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../../index.htm">Blog</a></li><li class="group"><a href="../../codeartifact-maven/index.htm">Java</a></li><li class="group"><a href="../../python/openapi4aws/index.htm">python</a></li><li class="group"><a href="../../csharp/xmlobjects/index.htm">c#</a></li><li class="group"><a href="../../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="../../cloud/aws/mfa/index.html">net + cloud</a></li><li class="group"><a href="#" class="justtext">Linux</a><ul class="navlist"><li class="group"><a href="../../linux/debian/troubleshooting.htm">Debian</a></li><li class="group"><a href="../../linux/centos/centos_hostname_and_dhcp.htm">CentOS</a></li><li class="group"><a href="../../solaris/index.htm">Solaris</a></li><li class="group"><a href="#" class="justtext">Ubuntu</a><ul class="navlist"><li><a href="../../linux/ubuntu/my_setup.htm">Configuration</a></li><li><a href="gamma.html">Colors - gamma</a></li><li class="active"><a href="#">Multiple monitors</a></li></ul></li><li class="group"><a href="../../linux/meego/nc10install.html">Meego</a></li><li class="group"><a href="../../linux/linuxaswinservice.htm">misc</a></li></ul></li><li class="group"><a href="../../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="../osx/nginx.html">Os X</a></li><li class="group"><a href="../../phd/index.htm">PhD</a></li><li class="group"><a href="../../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+
+<p class="timestamp">17th March 2010</p>
+<h1>Setup multiple monitors on Kubuntu (Nvidia)</h1>
+
+ <p class="note">This entry applies specifically to Kubuntu 10.04; 
+	<span class="mark">probably</span> also to later releases and
+	alternate Linux distributions</p>
+
+ <p>Assuming that the nvidia drivers are installed, it is needed to open the <span class="mark">NVIDIA X Server Settings</span>,
+	located in the Applications / Settings menu.</p>
+	
+ <p>On the left panel of the shown window, click on the <span class="mark">X Server Display Configuration</span> option, that should
+	show all the attached screens. By now, only one should be enabled, so click on the disabled one and press the 
+	<span class="mark">Configure...</span> button: select now the <span class="mark">TwinView</span> option, press Ok, select the correct
+	position (left / right) from the main window, and then apply the changes.</p>
+	
+ <p>Both screens should be now enabled, and the mouse should move around as expected (specially moving left/right). However, these changes
+	only last for the current session, will be lost as soon as the XServer is restarted. To make the changes persistent, press now the
+	<span class="mark">Save to X Configuration File</span> button.</p>
+	
+ <p>Somehow, the offered changes are not what they should be, it is better to handle the changes manually (it only implies adding two
+	lines to the configuration file). Press the <span class="mark">Show preview...</span> button, and pay attention to the 
+	<span class="mark">Section &quot;Screen&quot;</span>: it will contain two lines, looking like:</p>
+<pre>Option		"TwinView" "1"
+Option		"metamodes" "DFP-0: nvidia-auto-select +1680+0, DFP-1: nvidia-auto-select +0+0"</pre>
+
+ <p>The second line will depend on your exact settings.	In this example, it means that the main window is located 
+	at position 1680:0, and the additional monitor is on its left (1680 being my resolution width).</p>
+	
+ <p>Open then the <span class="mark">/etc/X11/xorg.conf</span> file and add these two lines into the 
+	Section &quot;Screen&quot;. After this change, I would still like to have my configuration automatically 
+	updated, so I execute, as detailed on the /etc/X11/xorg.conf file:</p>
+	
+ <pre>sudo dpkg-reconfigure -phigh xserver-org</pre>
+
+ <p>My own configuration file, without the initial comments, looks like:</p>
+
+<pre>Section "Monitor"
+	Identifier	"Configured Monitor"
+EndSection
+
+Section "Screen"
+	Identifier	"Default Screen"
+	Monitor		"Configured Monitor"
+	Device		"Configured Video Device"
+	DefaultDepth	24
+	Option		"TwinView" "1"
+	Option		"metamodes" "DFP-0: nvidia-auto-select +1680+0, DFP-1: nvidia-auto-select +0+0"
+EndSection
+
+Section "Module"
+	Load	"glx"
+EndSection
+
+Section "Device"
+	Identifier	"Configured Video Device"
+	Driver	"nvidia"
+	Option	"NoLogo"	"True"
+EndSection</pre>
+
+</div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+ </div>
+ <script type="text/javascript" src="../../js/coderazzi.js"></script>
+</body>
+</html>

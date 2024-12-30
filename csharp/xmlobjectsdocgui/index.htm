@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../../css/menu.css">
+ <link rel="stylesheet" type="text/css" href="../../css/special.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../../index.htm">Blog</a></li><li class="group"><a href="../../codeartifact-maven/index.htm">Java</a></li><li class="group"><a href="../../python/openapi4aws/index.htm">python</a></li><li class="group"><a href="#" class="justtext">c#</a><ul class="navlist"><li><a href="../xmlobjects/index.htm">XmlObjects</a></li><li class="active"><a href="#">XmlObjectsDocGui</a></li><li class="group"><a href="../../tnotes/csharp/gacWMono.html">technical notes</a></li></ul></li><li class="group"><a href="../../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="../../cloud/aws/mfa/index.html">net + cloud</a></li><li class="group"><a href="../../linux/debian/troubleshooting.htm">Linux</a></li><li class="group"><a href="../../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="../../howto/osx/nginx.html">Os X</a></li><li class="group"><a href="../../phd/index.htm">PhD</a></li><li class="group"><a href="../../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+
+	<p class="timestamp">5th May 2008</p>
+<h1>xmlobjectsDocGui - Documenting XmlObjects</h1>
+
+<ul type="disc">
+	<li><a href="#Description">Description</a></li>
+	<li><a href="#LicenseAndDownload">License and download</a></li>
+	<li><a href="#xmlobjects">Dependency on XmlObjects</a></li>
+</ul>	
+
+<h2><a name="Description">Description</a></h2>
+<p><span class="mark">XmlObjectsDocGui</span> is a tool that complements 
+<a href="http://www.coderazzi.net/csharp/xmlobjects">xmlobjects</a>, supporting the automatic
+generation of Html documentation from the information in the Xml schema used in 
+<span class="mark">xmlobjects</span>.</p>
+
+<p>It extracts the comments embedded in the C# definition of the Xml schema, and uses the 
+Xml hierarchy definition to generate the final Html pages.
+Currently, it only supports Gui handling, and the user cannot choose among different schemas.
+Specially interesting, on a future version, would be the generation of the full documentation in
+a single document.</p>
+
+<p>
+      <img src="xmlobjectsdocgui.png" class="centered">
+</p>
+
+<p>The idea behind <span class="mark">XmlObjectsDocGui</span> is to use the normal C# documentation
+accompanying the C# definition of the Xml Schema, to provide comprehensive documentation for
+that schema. <span class="mark">Microsoft</span> has defined the 
+<a href="http://msdn.microsoft.com/en-us/library/b2s063f7(VS.80).aspx">format of those comments</a>,
+but the only way to extracting them is by using the C# compiler. This tool requires, therefore:
+<ul>
+<li>
+The C# compiler, which will be invoked with the /doc argument.
+</li>
+<li>
+The list of C# files defining the Xml schema.
+</li>
+<li>
+Any DLL file referenced by those C# files.
+</li>
+</ul>
+</p>
+
+<p>
+It is needed also the target directory to store the generated documentation; this documentation
+is, as Xml, hierarchical, and needs the root type. It is possible to define this root type in
+the main application form, or require the application to show the list of types from where to 
+select that type.
+</p>
+
+<h2><a name="LicenseAndDownload">License and download</a></h2>
+<p><span class="mark">XmlObjectsDocGui</span> is delivered as it, without
+any responsabilities on the author. It is open source, it can be used or
+modified without any limitations.</p>
+
+<p>This application is only available in source format. 
+<ul>
+	<li>Version 1.00. (05/05/08).
+	<ul><li><a href="xmlobjectsdocgui-1-0.zip">xmlobjectsdocgui-1-0.zip</a></li></ul>
+	</li>
+</ul>
+</p>
+
+
+<h2><a name="xmlobjects">Dependency on XmlObjects</a></h2>
+
+<p><span class="mark">XmlObjectsDocGui</span> is designed to be independent of the <span class="mark">xmlobjects</span>
+library. Better explained, it is designed to be independent of the library version.</p>
+
+<p>The motivation is that the generation of the documentation of the schema depends on how <span class="mark">xmlobjects</span>
+interpretates that schema; it is therefore possible that the same C# structures defines different Xml schemas depending
+on the version of the library that is used. <span class="mark">XmlObjectsDocGui</span> allows therefore to provide 
+the exact library associated to an schema. This requirements has complicated the implementation of this application,
+but is also a good exercise on dynamic load of libraries.</p>
+
+<p>In any case, <span class="mark">XmlObjectsDocGui</span> still requires <span class="mark">xmlobjects</span>: 
+to facilitate the usage of the application, it stores information on the last run as 
+a configuration file. This is a Xml configuration file, and it is, obviously, loaded and stored using the 
+<span class="mark">xmlobjects</span> library.</p>
+<p>
+
+</div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+</div>
+ <script type="text/javascript" src="../../js/coderazzi.js"></script>
+</body></html>

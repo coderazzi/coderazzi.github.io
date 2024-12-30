@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Openapi 4 AWS</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+    <link rel="stylesheet" type="text/css" href="../css/global.css">
+    <meta name="Description" content="Openapi 4 AWS">
+    <meta name="Keywords" content="openapi aws maven">
+
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../css/menu.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../index.htm">Blog</a></li><li class="group"><a href="#" class="justtext">Java</a><ul class="navlist"><li><a href="../codeartifact-maven/index.htm">AWS+Maven</a></li><li class="group"><a href="#" class="justtext">OpenAPI4AWS</a><ul class="navlist"><li class="active"><a href="#">Overview</a></li><li><a href="cli.htm">cli</a></li><li><a href="maven.htm">maven</a></li></ul></li><li class="group"><a href="../tablefilter/index.html">Table filter</a></li><li><a href="../idldepend/index.htm">IdlDepend</a></li><li class="group"><a href="../virtualnet/index.htm">VirtualNet</a></li><li><a href="../virtualnet2/index.htm">VirtualNet2</a></li><li><a href="../phd/index.htm">Sensei</a></li><li><a href="../cmdlinker/index.htm">CmdLinker</a></li><li><a href="../filesplit/index.htm">FileSplit</a></li><li><a href="../glassedpane/index.html">GlassedPane</a></li><li><a href="../menu/index.htm">Menu Applet</a></li><li><a href="../splitimage/index.htm">SplitImage</a></li></ul></li><li class="group"><a href="../python/openapi4aws/index.htm">python</a></li><li class="group"><a href="../csharp/xmlobjects/index.htm">c#</a></li><li class="group"><a href="../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="../cloud/aws/mfa/index.html">net + cloud</a></li><li class="group"><a href="../linux/debian/troubleshooting.htm">Linux</a></li><li class="group"><a href="../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="../howto/osx/nginx.html">Os X</a></li><li class="group"><a href="../phd/index.htm">PhD</a></li><li class="group"><a href="../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+
+        <p class="timestamp">12th Dec 2021</p>
+        <h1 id="openapi-4-aws">Openapi 4 AWS</h1>
+        <img src="./openapi4aws.svg" class="right" width="180px" height="180px">
+        <ul>
+            <li>Website: <a href="https://coderazzi.net/openapi4aws">https://coderazzi.net/openapi4aws</a></li>
+            <li>Github: <a href="https://github.com/coderazzi/openapi4aws">https://github.com/coderazzi/openapi4aws</a></li>
+            <li>Github: <a href="https://github.com/coderazzi/openapi4aws">https://github.com/coderazzi/openapi4aws-maven-plugin</a></li>
+            <li>Github: <a href="https://github.com/coderazzi/openapi4aws-python">https://github.com/coderazzi/openapi4aws-python</a></li>
+            <li>License: MIT license</li>
+        </ul>
+        <p>This is utility to enrich an openapi specification with information specific for the AWS API Gateway.
+            It allows defining route integrations and authorizers to do automatic (re-)imports in API Gateway.</p>
+        <p>The openapi specification is extended on two parts:</p>
+        <ul>
+            <li>security: optionally, adding one or more authorizers.</li>
+            <li>paths: extending each method with the associated authorizer and defining an endpoint.</li>
+        </ul>
+        <p>The input to this utility is passed as parameters. This input depends on whether the command line
+            interface or the maven plugin is used.</p>
+        <ul>
+            <li><a href="cli.htm">Java CLI usage</a></li>
+            <li><a href="maven.htm">Maven usage</a></li>
+            <li><a href="../python/openapi4aws/index.html">Python standalone usage</a></li>
+        </ul>
+
+        <h2 id="versions">Versions</h2>
+        <ul>
+            <li>1.0.0 : 12th December 2021.</li>
+            <li>1.0.1 : 15th December 2021: major refactoring to support maven plugin.</li>
+            <li>1.1.0 : 18th December 2021: added configuration parameter</li>
+            <li>1.1.1 : 23rd December 2021: solved bug that returned no tags.</li>
+            <li>1.2.0 :  1st January 2022: order of parameters is not essential, although later parameters have precedence.</li>
+        </ul>
+
+    </div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+ </div>
+ <script type="text/javascript" src="../js/coderazzi.js"></script>
+</body>
+</html>

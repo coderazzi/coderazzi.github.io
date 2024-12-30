@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>VirtualNet: network simulation with JavaRMI.
+ Versions</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+ <link rel="stylesheet" type="text/css" href="../css/global.css">
+ <meta name="Description" content="VirtualNet">
+ <meta name="Keywords" content="java RMI network simulation">
+
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../css/menu.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../index.htm">Blog</a></li><li class="group"><a href="#" class="justtext">Java</a><ul class="navlist"><li><a href="../codeartifact-maven/index.htm">AWS+Maven</a></li><li class="group"><a href="../openapi4aws/index.htm">OpenAPI4AWS</a></li><li class="group"><a href="../tablefilter/index.html">Table filter</a></li><li><a href="../idldepend/index.htm">IdlDepend</a></li><li class="group"><a href="#" class="justtext">VirtualNet</a><ul class="navlist"><li><a href="index.htm">Overview</a></li><li><a href="availability.htm">Availability</a></li><li><a href="packages.htm">Packages</a></li><li><a href="interface.htm">Interface</a></li><li><a href="localExample.htm">Local example</a></li><li><a href="rmiExample.htm">RMI example</a></li><li><a href="executables.htm">Executables</a></li><li class="active"><a href="#">Versions</a></li></ul></li><li><a href="../virtualnet2/index.htm">VirtualNet2</a></li><li><a href="../phd/index.htm">Sensei</a></li><li><a href="../cmdlinker/index.htm">CmdLinker</a></li><li><a href="../filesplit/index.htm">FileSplit</a></li><li><a href="../glassedpane/index.html">GlassedPane</a></li><li><a href="../menu/index.htm">Menu Applet</a></li><li><a href="../splitimage/index.htm">SplitImage</a></li></ul></li><li class="group"><a href="../python/openapi4aws/index.htm">python</a></li><li class="group"><a href="../csharp/xmlobjects/index.htm">c#</a></li><li class="group"><a href="../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="../cloud/aws/mfa/index.html">net + cloud</a></li><li class="group"><a href="../linux/debian/troubleshooting.htm">Linux</a></li><li class="group"><a href="../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="../howto/osx/nginx.html">Os X</a></li><li class="group"><a href="../phd/index.htm">PhD</a></li><li class="group"><a href="../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+
+ <p class="timestamp">14th August 1997</p>  
+ <h1>VirtualNet (over RMI)</h1>
+ <h2>Version changes</h2>
+
+ <ul type="square">
+  <li><a href="#v021">version 0.1 to 0.21</a></li>
+ </ul>
+
+ <h3><a name="v021" id="v021">version 0.21</a></h3>
+
+ <p>The version 0.1 was limited in the number of nodes. This
+ version eliminates that limit. To do that:</p>
+
+ <ul type="square">
+  <li>A Node is not defined by a character, but by an string. This
+  string can have any character from 'A' to 'P'.</li>
+
+  <li>A Link was previously defined by a <em>short</em>. This was
+  really a bad design; now it is used an <em>integer</em>.</li>
+ </ul>
+
+ <p>The impact has been quite small. There is now an
+ incompatibility with the previous version; in v0.1, when a link is
+ going to be builded using the BuildNetLayout, it has to have the
+ format <em>NodeANodeBLink</em>; now, it is
+ <em>NodeALinkNodeB</em>, like +AB12C.</p>
+
+ <p>The display package does have a big impact, to be able to deal
+ with any number of nodes. There are below some snaphots of the new
+ display graphs:</p>
+
+ <h4>GraphNet</h4><img src="newnet.jpg" class="centered">
+
+ <h4>GraphCircle</h4><img src="newcrcle.jpg" class="centered">
+ </div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+ </div>
+ <script type="text/javascript" src="../js/coderazzi.js"></script>
+</body>
+</html>

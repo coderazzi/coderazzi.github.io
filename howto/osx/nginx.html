@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Installing Nginx in Os X</title>
+ <link rel="stylesheet" type="text/css" href="../../css/global.css">
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+ <meta name="Keywords" content="nginx osx">
+
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../../css/menu.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../../index.htm">Blog</a></li><li class="group"><a href="../../codeartifact-maven/index.htm">Java</a></li><li class="group"><a href="../../python/openapi4aws/index.htm">python</a></li><li class="group"><a href="../../csharp/xmlobjects/index.htm">c#</a></li><li class="group"><a href="../../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="../../cloud/aws/mfa/index.html">net + cloud</a></li><li class="group"><a href="../../linux/debian/troubleshooting.htm">Linux</a></li><li class="group"><a href="../../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="#" class="justtext">Os X</a><ul class="navlist"><li class="active"><a href="#">Nginx</a></li><li><a href="pg_rails.html">PostgreSQL / Rails</a></li><li class="group"><a href="../../osx/hackintoshing.htm">Hackintosh</a></li></ul></li><li class="group"><a href="../../phd/index.htm">PhD</a></li><li class="group"><a href="../../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+
+<p class="timestamp">19th June 2012<span class="timestamp_update">, updated:</span>1st July 2012</p>
+<h1>Installing Nginx in Os X</h1>
+
+<p>Currently, last stable Nginx version is 1.2.1, download available at 
+  <a href="http://nginx.org/en/download.html">http://nginx.org/en/download.html</a></p>
+
+<p>By default, it requires PCRE (Perl compatible regular expressions), which is -at least on Snow Leopard- partially available in /usr/lib. But without a full install, nginx will not compile.</p>
+
+<p>So, the first step is to download PCRE from <a href="http://www.pcre.org/">http://www.pcre.org/</a> 
+  (current version: 8.30), and expand it, let's say, to <span class="code">/tmp/pcre-8.30</span></p>
+
+<p>Download then Nginx, expanding it, let's say, to <span class="code">/tmp/nginx-1.2.1</span></p>
+
+<p>To install Nginx in  <span class="code">/usr/local/nginx</span>, do: </p>
+
+<pre>cd /tmp/nginx-1.2.1
+./configure --with-http_ssl_module --with-pcre=../pcre-8.30 --with-pcre-jit --with-http_ssl_module
+make
+sudo make install</pre>
+
+<p>To install it in another location, add the option <span class="code">--prefix=target</span> to the second line above (./configure --prefix=/target ...)</p>
+
+</div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+ </div>
+ <script type="text/javascript" src="../../js/coderazzi.js"></script>
+</body>
+</html>

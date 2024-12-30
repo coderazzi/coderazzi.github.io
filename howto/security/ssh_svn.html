@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>SSH + SVN</title>
+ <link rel="stylesheet" type="text/css" href="../../css/global.css">
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+ <meta name="Keywords" content="SSH SVN">
+
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../../css/menu.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../../index.htm">Blog</a></li><li class="group"><a href="../../codeartifact-maven/index.htm">Java</a></li><li class="group"><a href="../../python/openapi4aws/index.htm">python</a></li><li class="group"><a href="../../csharp/xmlobjects/index.htm">c#</a></li><li class="group"><a href="../../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="#" class="justtext">net + cloud</a><ul class="navlist"><li class="group"><a href="../../cloud/aws/mfa/index.html">AWS</a></li><li class="group"><a href="../../cloud/kubernetes/kubegres/index.html">Kubernetes</a></li><li class="group"><a href="#" class="justtext">SSH</a><ul class="navlist"><li><a href="ssh_2factorauth.html">Two factor authentication</a></li><li class="active"><a href="#">Serving SVN on SSH</a></li><li><a href="ssh_port_debian.html">SSH daemon on different port</a></li><li><a href="ssh_keys.html">Using SSH keys</a></li></ul></li><li class="group"><a href="../openwrt/tl841n/index.htm">OpenWRT</a></li></ul></li><li class="group"><a href="../../linux/debian/troubleshooting.htm">Linux</a></li><li class="group"><a href="../../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="../osx/nginx.html">Os X</a></li><li class="group"><a href="../../phd/index.htm">PhD</a></li><li class="group"><a href="../../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+
+<p class="timestamp">07th September 2012<span class="timestamp_update">, updated:</span>24th March 2018</p>
+ <ul>
+	 <li><a href="#setup">Setting up SVN on SSH</a></li>
+	 <li><a href="#repositories">Repositories</a></li>
+	 <li><a href="#viewvc">Web browsing support</a></li>
+ </ul>
+
+
+<h1><a name="setup">Setting up SVN on SSH</a></h1>
+
+<p>Normally, a subversion url looks as</p>
+<pre>https://server/etc</pre>
+<p>This means that subversion is being served using HTTP(s) protocol; an alternative is to use SVN + SSH,
+	that is, to tunnel subversion on ssh.
+	The main advantage of supporting HTTP is to avoid problems with firewalls, but it is slower 
+	and implies additional setup on the server machine. 
+	This setup is anyway easy, but only if Apache is already installed; 
+	if the server favors Nginx, this setup becomes suddenly a complication.</p>
+
+<p>Having SSH + SVN does not imply, in fact, any additional work. 
+	Let's imagine we have a server account called <span class="mark">coderazzi</span>, 
+	and assume a SVN repository called <span class="mark">projectx</span>, located as 
+	<span class="mark">/home/coderazzi/svn/projectx</span>. 
+	To checkout this repository on any remote machine is enough to do:</p>
+
+<pre>svn co svn+ssh://coderazzi@coderazzi.com/home/coderazzi/svn/projectx . </pre>
+
+<p>This checkout will succeed,a s far as the user enters correctly the password of the
+	account. Matter of fact -and of inconvenience-, the user will have to enter 
+	<span class="mark">twice</span> the password.</p>
+
+<p>What is happening on the server side? 
+	Not much: the svn client action triggers the svnserver process on the server 
+	-which is created just for this transaction-, using the passed credentials; 
+	the required files are then transferred back over ssh.</p>
+
+<p>So, this setup works, but has two main problems:</p>
+
+<ol><li>Being requested the password. Twice. This can be solved using ssh keys.</li>
+	<li>Requiring the account's password. The user will likely have more services on the server, 
+		potentially sensible, and using its password for subversion purposes seems an ill idea</li></ol>
+
+<p>So, the solution passes by creating a separate account and setting up ssh keys. 
+	Any account is okay, but using <span class="mark">svn</span> seems rather appropriated.  
+	So, on the server side do first:</p>
+
+<pre>#install subversion, if required:
+
+sudo apt-get install subversion
+
+#setup specific user
+
+sudo useradd svn
+sudo mkdir /home/svn
+sudo mkdir /home/svn/.ssh
+sudo chown -R svn:svn /home/svn
+ 
+#And request  a passwd:
+
+sudo passwd svn</pre>
+
+<p>Now, create the directory <span class="mark">/srv/svn</span> 
+	and dump there the current repositories (or create them using <span class="mark">svnadmin create</span>):</p>
+
+
+<pre>sudo chown -R svn:svn /srv/svn
+ 
+#Change permissions and umask to 2 to ensure correct permissions:
+
+sudo chmod 2770 -R /srv/svn/ </pre>
+
+<p>Now, instead of using the coderazzi user, we can use the more restricted svn user</p>
+
+<pre>svn co svn+ssh://svn@coderazzi.com/srv/svn/projectx . </pre>
+
+<p>To avoid the password request madness, it is obviously possible to use 
+	ssh keys on the svn account. This <a href="ssh_keys.html">short tutorial</a>
+	describes the whole proccess of setting up ssh keys: in short, it implies having a 
+	<span class="mark">~/.ssh</span> directory in the <span class="mark">svn</span> user home
+	 folder (chmodded to 700), 
+	and inside a file called <span class="mark">authorized_keys</span> (chmodded to 600). 
+	To add a specific user, we obtain his public key, and add it to the 
+	<span class="mark">authorized_keys</span> file of the <span class="mark">svn</span> user:</p>
+
+<pre>cat coderazzi.key.pub > ~/.ssh/authorized_keys</pre>
+
+<p>On the client side, it implies having a 
+	<span class="mark">~/.ssh</span> directory in the user home folder (chmodded to 700), 
+	and inside a file called <span class="mark">id_rsa</span> (chmodded to 600), containing
+	the private key -note that this is the default expected configuration, but other
+	configurations are indeed possible-. Once this is done, 
+	the user owning the coderazzi.key certificate (and its passphrase), 
+	will be able to access the subversion repository. In addition, this user does not need to know the 
+	<span class="mark">svn</span>'s user password; however, this user can still do any normal
+	ssh session on the svn account -which in most cases seems a bad idea-.</p>
+
+<p>To avoid this, the autorized_keys file must include information to restrict the ssh operations:
+   it can include an entry that defines the command to be executed when this key is used to start
+   a ssh session. This file contain one entry for each public key, such as:</p>
+
+<pre>ssh-rsa AAAAB3....</pre>
+
+<p>To ensure that only SVN is provided, and, in addition, that only specific folders (<span class="mark">/srv/svn</span>) 
+	are supported, we update this entry to look like:</p>
+
+<pre>command="/usr/bin/svnserve -t -r /srv/svn/",no-port-forwarding,no-pty,
+	           no-agent-forwarding,no-X11-forwarding ssh-rsa AAA...</pre>
+
+<p>(so we are setting additionally sound restrictions). Because of the entry <span class="mark">-r /srv/svn</span>, 
+	the user does not need any longer to enter the full path to the svn folder as in:</p>
+
+<pre>svn co svn+ssh://svn@coderazzi.com/srv/svn/projectx .</pre>
+
+<p>Instead, the user can enter now directly:</p>
+
+<pre>svn co svn+ssh://svn@coderazzi.com/projectx . </pre>
+
+<p>Although this is now enough for the setup, we have assumed that the user owns a single ssh key. 
+	This can be a bad idea for security reasons, so let's assume that the user has a second key, 
+	to be used explicitly on SVN access. In this case is this second public key  what is inserted 
+	into the server' authorized_keys file for the SVN user. The key itself can be saved 
+	on the .ssh folder of the user, and he must now explicitly require this user for SVN access. To do so:</p>
+
+<pre>export SVN_SSH="ssh -i /Users/coderazzi/.ssh/coderazzi.svn.key</pre>
+
+
+<span>One better alternative to this approach is to define a new entry in the ssh configuration file <span class="mark">~/.ssh/config</span>
+
+
+<pre>Host coderazzi.net
+        IdentityFile ~/.ssh/svn_id_rsa
+        User svn
+        Hostname 51.254.207.228
+        Port 22
+</pre>
+
+		 <p>Note that there can be more than one entry for host coderazzi.net, if different users are specified.
+			 BUT the first entry in the configuration file should be the default one</p>
+
+
+
+<h2><a name="repositories">Repositories</a></h2>
+
+<p>The process to handle new repositories is done directly <b>on the server</b>, and it is therefore not impacted by how svn is served;
+for example, for a repository called website, available on the created /srv/svn location:</p>
+<pre>
+sudo svnadmin create /srv/svn/website
+sudo chmod -R 770 /srv/svn/website
+</pre>
+
+<p>To import now content into the newly created repository, using ssh keys, <b>on the client</b> that currently holds that content:</p>
+
+<pre>svn import cdf svn+ssh://svn@coderazzi.net/website -m "initial one"</pre>
+
+<p>Which should then be immediately checked out to start working on the versioned folder:</p>
+
+<pre>svn co svn+ssh://svn@coderazzi.net/website [folder-name]</pre>
+
+<p>Alternatively, if using the conventional structure supporting branches, tags, the initial import would look like:</p>
+
+<pre>svn import cdf svn+ssh://svn@coderazzi.net/website/trunk -m "initial one"</pre>
+
+<p>And creation of tags, branches would be as easy as:</p>
+
+<pre>svn copy svn+ssh://svn@coderazzi.net/website/trunk \
+	svn+ssh://svn@coderazzi.net/website/tags/v0.20 -m "v 0.20"</pre>
+
+
+<p>These usages of the repository from the client side are only valid if the ssh key is used.
+	If, on the contrary, the user needs at any moment to access it without this key, just with credentials, the
+	complete repository path would be required. That is, instead of:</p>
+
+<pre>svn co svn+ssh://svn@coderazzi.net/website</pre>
+
+<p>The user would do:</p>
+
+<pre>svn co svn+ssh://svn@coderazzi.net/srv/svn/website</pre>
+
+<p>
+
+
+<h2><a name="viewvc">Web browsing support</a></h2>
+
+<p>A problem with this approach is losing the ability to browse the subversion repositories in a web browser.
+The solution is setting up <a href="http://viewvc.org/">ViewVC</a></p>
+
+<p>Installation is as simple as downloading and expanding it to a suitable location, such as <span class="code">/opt/viewvc</span>. The only file absolutely requiring some configuration is <span class="code">viewvc.conf</span>, to provide the SVN repository locations. In my case, I had to include:</p>
+
+<pre>root_parents = /srv/svn: svn</pre>
+
+<p>Although it is possible to run its standalone server, the obvious advantage is integrating it into the available nginx engine. However,
+providing the correct nginx configuration time took me longer than expected. This is my final ViewVC / nginx configuration:</p>
+
+<pre>server {
+        listen 80;
+        server_name svn.coderazzi.net;
+
+        access_log /var/log/nginx/svn.access.log;
+        error_log  /var/log/nginx/svn.error.log;
+
+        root /opt/viewvc;
+
+        location ~ ^/viewvc.cgi$ {
+                auth_basic "SVN access login";
+                auth_basic_user_file /home/coderazzi/www/coderazzi.net/cgi/.htpasswd;
+                gzip off;
+                fastcgi_pass  unix:/var/run/fcgiwrap.socket;
+                fastcgi_param   DOCUMENT_ROOT           $document_root;
+                fastcgi_param   SCRIPT_FILENAME         /opt/viewvc/viewvc.cgi;
+        }
+        location ~ ^/$ {
+                rewrite .* http://svn.coderazzi.net/viewvc.cgi;
+                break;
+        }
+        location ^~ /templates/ {
+        }
+        location ~ /(.+)$ {
+                auth_basic "SVN access login";
+                auth_basic_user_file /home/coderazzi/www/coderazzi.net/cgi/.htpasswd;
+                gzip off;
+                fastcgi_pass  unix:/var/run/fcgiwrap.socket;
+                fastcgi_param   DOCUMENT_ROOT           $document_root;
+                fastcgi_param   SCRIPT_FILENAME         /opt/viewvc/viewvc.cgi;
+                fastcgi_param   PATH_INFO               $1;
+                fastcgi_param   QUERY_STRING            $query_string;
+
+        }
+}</pre>
+
+<p>To customize it, it is needed to override the values for <b>server_name</b>, <b>root</b> and <b>SCRIPT_FILENAME</b>, plus, of course, your very own <b>auth_basic_user_file</b></p>.
+
+
+
+</span></div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+ </div>
+ <script type="text/javascript" src="../../js/coderazzi.js"></script>
+</body>
+</html>

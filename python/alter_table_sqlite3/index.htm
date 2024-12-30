@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>alter_table - Python command to alter sqlite3 tables</title>
+<link rel="stylesheet" type="text/css" href="../../css/global.css">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+ <meta name="Keywords" content="python sqlite3 alter table">
+
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../../css/menu.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../../index.htm">Blog</a></li><li class="group"><a href="../../codeartifact-maven/index.htm">Java</a></li><li class="group"><a href="#" class="justtext">python</a><ul class="navlist"><li><a href="../openapi4aws/index.htm">openapi4aws</a></li><li><a href="../optmatch/index.htm">optmatch</a></li><li><a href="../gimp/pythonfu.html">Gimp / PythonFu</a></li><li><a href="../../tnotes/python/decoratorsWithoutArguments.html">Decorators</a></li><li><a href="../../tnotes/python/migrating2to3.html">2.x to 3.0</a></li><li class="active"><a href="#">sqlite3</a></li></ul></li><li class="group"><a href="../../csharp/xmlobjects/index.htm">c#</a></li><li class="group"><a href="../../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="../../cloud/aws/mfa/index.html">net + cloud</a></li><li class="group"><a href="../../linux/debian/troubleshooting.htm">Linux</a></li><li class="group"><a href="../../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="../../howto/osx/nginx.html">Os X</a></li><li class="group"><a href="../../phd/index.htm">PhD</a></li><li class="group"><a href="../../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+	 <p class="timestamp">17th March 2013</p>
+<h1>Alter sqlite3 tables</h1>
+
+
+<p><span class="mark">alter_table</span> is a python utility to alter sqlite3 tables. It allows, with limitations, for several
+	operations not directly supported in sqlite:</p>
+
+<ul><li>Drop columns</li>
+	<li>Rename columns: it supports also renaming the special <span class="mark">rowid</span> column</li>
+	<li>Reorder columns</li>
+</ul>
+
+<p>All operations are performed from the command line. The supported arguments are:</p>
+
+<ul>
+	<li>First argument: the filename with the sqlite3 database.</li>
+	<li>Next arguments: operations to perform, which can be one of:
+		<ul>
+			<li><span class="mark">table:-column</span> drops the specified column in the given table.</li>
+			<li><span class="mark">table:column@position</span> modifies the position of the column in the table. The position is zero- based, and is handled in the order specified on the command line.</li>
+			<li><span class="mark">table:column=new_name</span> renames the specified column in the given table with the new provided name</li>
+		</ul>
+		An argument can provide several operations at once, like in: <span class="mark">table:column=new_name:-column</span>
+	</li>
+</ul>	
+
+<p>Example:</p>
+<pre>python alter_table.py db.sqlite movies:rowid=id:name=title:title@2</pre>
+<p>In this case, the table movies is modified: the current primary key (rowid) is renamed as id, the column name is renamed as title, and positioned as 3rd column in the table.</p>
+
+<p>The utility generates a new database, on a file on the same path with the same name as the original, but prepending <span class="mark">altered-</span></p>
+
+<h2><a name="restrictions">Restrictions</a></h2>
+
+<p>When a column in a table is dropped renamed, the related indexes are automatically recreated (or removed), reflecting the new names
+	given to the columns.</p>
+
+<p>There could be additional side effects on altering tables: triggers and views require additional updates, but <span class="mark">alter_table</span> does not perform these. So the user must ensure proper recreation of triggers and views if required (indexes are properly updated)</p>
+
+<p>To perform the modifications, this script effectively drops the affected tables, recreating them and transferring the data: if there are <span class="mark">foreign key</span> constraints against the tables being dropped, the script will fail with a sqlite exception: foreign keys are currently not properly handled.</p>
+
+
+
+<h2><a name="download">Download</a></h2>
+
+<ul>
+	<li>Current version is 0.20, released the 22nd March 2013: <a href="alter_table.py">alter_table.py</a></li>	
+</ul>
+
+<p>History:
+	<ul>
+		<li>22nd March 2013: version 0.20
+			<ul><li>Columns can be now reordered</li>
+				<li>Special column <span class="mark">rowid</span> can be renamed.</li> 
+				<li>Better checks on command line arguments.</li></ul>
+		</li> 
+		<li>19th March 2013: version 0.11, solves a bug where columns in tables would be defined in lower case</li>
+		<li>Initial version: 0.1, released the 17th March 2013</li>
+	</ul></p>
+
+<p><span class="mark">alter_table</span> is open source, with the 
+following generic python license:</p>
+
+<pre>Copyright (c) Luis M. Pena &lt;lu@coderazzi.net&gt;  All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+Redistributions in bytecode form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in
+the documentation and/or other materials provided with the
+distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</pre>
+
+</div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+ </div>
+ <script type="text/javascript" src="../../js/coderazzi.js"></script>
+</body>
+</html>

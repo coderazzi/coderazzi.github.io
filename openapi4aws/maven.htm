@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Openapi 4 AWS - cli</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+    <link rel="stylesheet" type="text/css" href="../css/global.css">
+    <meta name="Description" content="Openapi 4 AWS - maven plugin">
+    <meta name="Keywords" content="openapi aws maven plugin">
+
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../css/menu.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../index.htm">Blog</a></li><li class="group"><a href="#" class="justtext">Java</a><ul class="navlist"><li><a href="../codeartifact-maven/index.htm">AWS+Maven</a></li><li class="group"><a href="#" class="justtext">OpenAPI4AWS</a><ul class="navlist"><li><a href="index.htm">Overview</a></li><li><a href="cli.htm">cli</a></li><li class="active"><a href="#">maven</a></li></ul></li><li class="group"><a href="../tablefilter/index.html">Table filter</a></li><li><a href="../idldepend/index.htm">IdlDepend</a></li><li class="group"><a href="../virtualnet/index.htm">VirtualNet</a></li><li><a href="../virtualnet2/index.htm">VirtualNet2</a></li><li><a href="../phd/index.htm">Sensei</a></li><li><a href="../cmdlinker/index.htm">CmdLinker</a></li><li><a href="../filesplit/index.htm">FileSplit</a></li><li><a href="../glassedpane/index.html">GlassedPane</a></li><li><a href="../menu/index.htm">Menu Applet</a></li><li><a href="../splitimage/index.htm">SplitImage</a></li></ul></li><li class="group"><a href="../python/openapi4aws/index.htm">python</a></li><li class="group"><a href="../csharp/xmlobjects/index.htm">c#</a></li><li class="group"><a href="../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="../cloud/aws/mfa/index.html">net + cloud</a></li><li class="group"><a href="../linux/debian/troubleshooting.htm">Linux</a></li><li class="group"><a href="../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="../howto/osx/nginx.html">Os X</a></li><li class="group"><a href="../phd/index.htm">PhD</a></li><li class="group"><a href="../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+
+        <p class="timestamp">16th Dec 2021</p>
+        <h1 id="openapi-4-aws">Openapi 4 AWS maven plugin</h1>
+        <img src="./openapi4aws.svg" class="right" width="180px" height="180px">
+        <ul>
+            <li>Github: <a href="https://github.com/coderazzi/openapi4aws-maven-plugin">https://github.com/coderazzi/openapi4aws-maven-plugin</a></li>
+            <li>Maven central: <a href="https://mvnrepository.com/artifact/net.coderazzi/openapi4aws-maven-plugin">
+                https://mvnrepository.com/artifact/net.coderazzi/openapi4aws-maven-plugin</a></li>
+            <li>License: MIT license</li>
+        </ul>
+        <p>This is utility to enrich an openapi specification with information specific for the AWS API Gateway.
+            It allows defining route integrations and authorizers to do automatic (re-)imports in API Gateway.</p>
+
+        <p>This is a maven plugin for the <a href="https://coderazzi.net/openapi4aws">openapi4aws</a> utility:
+            as a maven plugin, all the information is passed using the configuration in the pom file.
+            A configuration example is given below. For the details of each field,
+            please refer to the openapi4aws utility (<a href="https://github.com/coderazzi/openapi4aws">https://github.com/coderazzi/openapi4aws</a>)</p>
+        <pre>
+&lt;plugin&gt;
+    &lt;groupId&gt;net.coderazzi&lt;/groupId&gt;
+    &lt;artifactId&gt;openapi4aws-maven-plugin&lt;/artifactId&gt;
+    &lt;configuration&gt;
+      &lt;authorizers&gt;
+        &lt;authorizer&gt;
+          &lt;name&gt;DubaixCognito&lt;/name&gt;
+          &lt;identity-source&gt;$request.header.Authorization&lt;/identity-source&gt;
+          &lt;issuer&gt;https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_1T9bfKHNp&lt;/issuer&gt;
+          &lt;audience&gt;
+            &lt;id&gt;2f0m9fcoiejij4316u574aq259&lt;/id&gt;
+            &lt;id&gt;7ac34sujrb8gmvj2b6blpi7ruu&lt;/id&gt;
+          &lt;/audience&gt;
+          &lt;authorization-type&gt;oauth2&lt;/authorization-type&gt;
+        &lt;/authorizer&gt;
+        &lt;authorizer&gt;
+          &lt;name&gt;Unused&lt;/name&gt;
+          &lt;identity-source&gt;$request.header.Authorization&lt;/identity-source&gt;
+          &lt;issuer&gt;https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_1T9bfKHNp&lt;/issuer&gt;
+          &lt;audience&gt;2f0m9fcoiejij4316u574aq259&lt;/audience&gt;
+          &lt;authorization-type&gt;oauth2&lt;/authorization-type&gt;
+        &lt;/authorizer&gt;
+      &lt;/authorizers&gt;
+      &lt;integrations&gt;
+        &lt;path-integration&gt;
+          &lt;path&gt;/user/scope&lt;/path&gt;
+          &lt;uri&gt;http://3.64.241.104:12122/path&lt;/uri&gt;
+          &lt;authorizer&gt;DubaixCognito&lt;/authorizer&gt;
+          &lt;scopes&gt;
+            &lt;scope&gt;user.email&lt;/scope&gt;
+            &lt;scope&gt;user.id&lt;/scope&gt;
+          &lt;/scopes&gt;
+        &lt;/path-integration&gt;
+        &lt;tag-integration&gt;
+          &lt;tag&gt;Frontend&lt;/tag&gt;
+          &lt;uri&gt;http://3.64.241.104:12121/tmp/&lt;/uri&gt;
+        &lt;/tag-integration&gt;
+      &lt;/integrations&gt;
+      &lt;transforms&gt;
+        &lt;transform&gt;
+          &lt;input&gt;use.yaml&lt;/input&gt;
+          &lt;glob-input&gt;*.yaml2&lt;/glob-input&gt;
+          &lt;output-folder&gt;target&lt;/output-folder&gt;
+        &lt;/transform&gt;
+        &lt;transform&gt;
+          &lt;input&gt;
+            &lt;filename&gt;one.yaml&lt;/filename&gt;
+            &lt;filename&gt;otherFile.yaml&lt;/filename&gt;
+          &lt;/input&gt;
+        &lt;/transform&gt;
+      &lt;/transforms&gt;
+    &lt;/configuration&gt;
+    &lt;executions&gt;
+      &lt;execution&gt;
+        &lt;phase&gt;package&lt;/phase&gt;
+        &lt;goals&gt;
+          &lt;goal&gt;transform&lt;/goal&gt;
+        &lt;/goals&gt;
+      &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;
+    </pre>
+
+        <p>It is possible to define this long XML configuration in one or more external files, or just using
+            a mix of in-pom definitions and external property files. For example: </p>
+
+        <pre>
+    &lt;configuration&gt;
+      &lt;external&gt;openapi4aws.settings&lt;/external&gt;
+      &lt;transforms&gt;
+        &lt;transform&gt;
+          &lt;input&gt;use.yaml&lt;/input&gt;
+        &lt;/transform&gt;
+      &lt;/transforms&gt;
+    &lt;/configuration&gt;
+        </pre>
+
+        <p>The external file defines the configuration values using the
+            <a href="https://github.com/coderazzi/openapi4aws">openapi4aws cli configuration</a>.
+            An example of such configuration file is:</p>
+
+        <pre># a simple comment
+authorizer.name=DubaixCognito,Other
+authorizer.identity-source=$request.header.Authorization
+authorizer.audience=2f0m9fcoiejij4316u574aq259,7ac34sujrb8gmvj2b6blpi7ruu
+authorizer.issuer=https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_1T9bfKHNp
+
+tag.Frontend=http://3.64.241.104:12121/tmp/,DubaixCognito,user.email,user.id
+path.user.scope2=http://OTHER_PATH:12122/path,Other,user.email</pre>
+
+    </div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+ </div>
+ <script type="text/javascript" src="../js/coderazzi.js"></script>
+</body>
+</html>

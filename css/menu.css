@@ -1,0 +1,66 @@
+.navcontainer {
+	border-right: 1px solid #aaa;
+	font-size: 15px;
+	font-weight: 400;
+	text-align: center;
+	text-transform: lowercase;
+	background: white;
+}
+
+ul.navlist {
+	text-align: left;
+	list-style: none;
+	padding: 0;
+	margin: 0 0 0 15px;
+	width: 140px;
+}
+
+ul.navlist li {
+	display: block;
+	margin: 0;
+	padding: 0;
+}
+
+ul.navlist li a {
+	display: block;
+	width: 100%;
+	padding: 0.5em 0 0.5em 2em;
+	color: #777;
+	text-decoration: none;
+}
+
+.navcontainer>ul.navlist li a { width: auto; }
+
+ul.navlist li.active a {
+	font-size: 110%;
+	color: black;
+	font-weight: 900;
+	border-top: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+}
+
+ul.navlist li a:hover, ul.navlist li.active a:hover {
+	color: white;
+	background: black
+}
+
+ul.navlist a.justtext, ul.navlist a.justtext:hover {
+	font-style: italic;
+}
+
+
+@media only screen and (max-width: 992px) {
+
+	.navcontainer {
+		border-bottom: 1px solid #aaa;
+	}
+}
+
+@media only screen and (min-height: 800px) {
+
+	.navcontainer {
+		width: 200px;
+		position: fixed;
+	}
+}
+

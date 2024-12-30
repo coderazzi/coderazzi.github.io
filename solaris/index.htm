@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Solaris</title>
+ <link rel="stylesheet" type="text/css" href="../css/global.css">
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+ <meta name="Keywords" content="solaris">
+
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../css/menu.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../index.htm">Blog</a></li><li class="group"><a href="../codeartifact-maven/index.htm">Java</a></li><li class="group"><a href="../python/openapi4aws/index.htm">python</a></li><li class="group"><a href="../csharp/xmlobjects/index.htm">c#</a></li><li class="group"><a href="../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="../cloud/aws/mfa/index.html">net + cloud</a></li><li class="group"><a href="#" class="justtext">Linux</a><ul class="navlist"><li class="group"><a href="../linux/debian/troubleshooting.htm">Debian</a></li><li class="group"><a href="../linux/centos/centos_hostname_and_dhcp.htm">CentOS</a></li><li class="group"><a href="#" class="justtext">Solaris</a><ul class="navlist"><li class="active"><a href="#">SunOS</a></li><li><a href="p5q-e/index.htm">Solaris on P5Q-E</a></li><li><a href="p5q-e/opensolaris.htm">OpenSolaris on P5Q-E</a></li><li><a href="oracle.htm">Oracle 11g</a></li></ul></li><li class="group"><a href="../linux/ubuntu/my_setup.htm">Ubuntu</a></li><li class="group"><a href="../linux/meego/nc10install.html">Meego</a></li><li class="group"><a href="../linux/linuxaswinservice.htm">misc</a></li></ul></li><li class="group"><a href="../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="../howto/osx/nginx.html">Os X</a></li><li class="group"><a href="../phd/index.htm">PhD</a></li><li class="group"><a href="../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+
+<p class="timestamp">16th February 2010</p>   
+<h1>SunOS</h1>
+
+<img src="250px-Sparcstation5.jpg" alt="Sparcstation 5 image, from http://en.wikipedia.org/wiki/SPARCstation_5" class="right">
+
+<p>My first encounter with Solaris was in 1992. In fact, the operative system installed was still named SunOS, running on a nice Sparcstation -the year before, Linux had been born, but I would be oblivious to it until 1997, when I would install Red Hat for the first time-. </p>
+
+
+<p>Since 1992, I have worked in 11 different companies, and 8 of them used, in greater or lesser extent, Sun hardware (all of them used also Windows, in probably greater extent, but that is another story . . .). In any case, I never felt compelled to install Solaris at home (although a free version was  available by 2003).</p>
+
+<p>This changed recently, when I had to install Oracle at home. While Oracle 10g Express Edition is easy to install, in Windows or in Linux, it has a limit of 4 Gb on disk space, and that didn't met my expectations. Installing any other version than XE on linux is more challenging, and playing with the possibilities, I decided to bet on Solaris.</p>
+
+<p>Instead of trying the virtual machine approach, I preferred installing it Solaris on its own harddisk, for the security perspective: doing online banking from home is, from my paranoid perspective, risky business. Well, banking is risky business, unless you are the banker, but that is another story . . . 
+
+Requiring online banking, I would never use my Windows installations; for the time being, I feel <span class="mark">a bit</span> more confident using my Os X machine (and to lesser extent, my hackintoshes), and much more confident with <span class="mark">some</span> of my Linux installations.
+
+The best approach I have found, so far, is to use a Linux distribution on CD. I could use some of the Live CDs, but I prefer customizing my own distribution using <a href="http://www.slax.org/">Slax</a>. The problem, of course, is that it is an slow process: I must boot the machine using the CD -it loads it on memory-, and the process takes a bit less than 4 minutes. Each time that I need new updates, I must burn a new CD, customizing it. So, having Solaris should be faster, right?</p>
+
+<p>Anyway, safer online banking is only a side benefit of using Solaris. However, there are several drawbacks. The main one is that, there is currently no way to freeze the machine in Solaris -sleep or hibernate-. Solaris boot fast, but then the whole working environment must be still recreated. Also, while the free distribution Solaris provides the users with all the security updates, the normal package updates are not available: the associated subscription costs $324 for my machine.</p>
+
+<p>An alternative is to use <a href="http://www.opensolaris.com/">OpenSolaris</a>. Then, it is possible also to suspend the machine, although hibernation is still disabled.</p>
+
+<p>If you are interested in installing Solaris, this <a href="p5q-e/index.htm">guide</a> can be useful to you. 
+In reality, Solaris support immediately a lot of hardware (see the <a href="http://www.sun.com/bigadmin/hcl/">compatibility list</a>), and the installation is quite straightforward -easier than hacking OsX, definitely!-.</p>
+
+<p>I have included also a <a href="p5q-e/opensolaris.htm">description</a> of the most updated OpenSolaris installation, and <a href="oracle.htm">how to install</a> Oracle 11g on both installations.</p>
+
+</div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+ </div>
+ <script type="text/javascript" src="../js/coderazzi.js"></script>
+</body>
+</html>

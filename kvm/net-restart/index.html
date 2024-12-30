@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>KVM - network restart</title>
+ <link rel="stylesheet" type="text/css" href="../../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../../css/sunburst.css">
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+ <meta name="Keywords" content="kvm, network">
+ <meta name="Author" content="Luis M. Pena">
+ <script type="text/javascript" src="../../js/prettify/run_prettify.js"></script>
+
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../../css/menu.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../../index.htm">Blog</a></li><li class="group"><a href="../../codeartifact-maven/index.htm">Java</a></li><li class="group"><a href="../../python/openapi4aws/index.htm">python</a></li><li class="group"><a href="../../csharp/xmlobjects/index.htm">c#</a></li><li class="group"><a href="../../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="../../cloud/aws/mfa/index.html">net + cloud</a></li><li class="group"><a href="#" class="justtext">Linux</a><ul class="navlist"><li class="group"><a href="../../linux/debian/troubleshooting.htm">Debian</a></li><li class="group"><a href="../../linux/centos/centos_hostname_and_dhcp.htm">CentOS</a></li><li class="group"><a href="../../solaris/index.htm">Solaris</a></li><li class="group"><a href="../../linux/ubuntu/my_setup.htm">Ubuntu</a></li><li class="group"><a href="../../linux/meego/nc10install.html">Meego</a></li><li class="group"><a href="#" class="justtext">misc</a><ul class="navlist"><li><a href="../../linux/linuxaswinservice.htm">Linux as winservice</a></li><li><a href="../../linux/macmini2006/macmini.htm">Mac Mini upgrade</a></li><li><a href="../../linux/synergy.patch/index.htm">Synergy patch</a></li><li><a href="../../linux/dual_nic_linux.htm">Dual NIC on Linux</a></li><li><a href="../../linux/thunderbird-backup.htm">Thunderbird backup</a></li><li class="active"><a href="#">KVM Network restart</a></li></ul></li></ul></li><li class="group"><a href="../../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="../../howto/osx/nginx.html">Os X</a></li><li class="group"><a href="../../phd/index.htm">PhD</a></li><li class="group"><a href="../../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+
+<p class="timestamp">12th October 2014</p>
+<h1>KVM network restart</h1>
+
+	<img src="network.png" class="right">
+
+	<p> 
+		While working with KVM virtual networks, it arises often enough the need to edit the network definition, like editing DHCP assignments. This causes all the associated guests to lose network connectivity, and it is required to detach / re-attach their network interfaces. There is a <a href="http://git.zaytsev.net/?p=anubis-puppet.git;a=blob;f=manifests/files/common/network-restart">shell script</a> to perform this operation on the default network, with a few constraints.
+	</p>
+
+    <p>
+        The documented constraints relates to modifying only the default network, and to assume all guests having just one 
+        network interface. To avoid those constraints and allow the attachment of any network, I wrote the following <a href="./net_restart.py">python script</a>, that requires as arguments the network or networks to reattach:
+	</p>
+
+
+<pre class="prettyprint">
+#!/usr/bin/env python
+#
+# Script to enable restarting a network: 
+#       network interfaces are detached / reattached
+#
+# (c) Luis M Pena <coderazzi@gmail.com> 2014
+#     Version 1.1
+#
+# This work is herewith placed in public domain.
+
+
+import argparse, libvirt, sys, time, subprocess
+import xml.etree.ElementTree as XTree
+
+clParser = argparse.ArgumentParser(description='VIRT network restarter')
+clParser.add_argument('networks', type=str, nargs='+')
+clParser.add_argument('-c', '--connect')
+clParser.add_argument('-n', '--no-iptables', action='store_true')
+args = clParser.parse_args()
+
+
+conn = libvirt.open(args.connect)
+if not conn:
+    hypervisor = args.connect or '(default)'
+    print 'Failed to open connection to the hypervisor:', hypervisor
+    sys.exit(1)
+
+devices=[]
+for network in args.networks:
+    try:
+        net = conn.networkLookupByName(network)
+    except:
+        print >> sys.stderr, 'Invalid network name:', network
+        continue
+    iptables = None if args.no_iptables else subprocess.check_output(['iptables-save'])
+    print 'Stopping network', network
+    net.destroy()
+    for did in conn.listDomainsID():
+        domain  = conn.lookupByID(did)
+        xmlDesc = domain.XMLDesc(0)
+        for n in XTree.fromstring(xmlDesc).findall('devices/interface'):
+            if n.get('type')=='network':
+                source, mac = [n.find(x) for x in ['source', 'mac']]
+                source      = source is not None and source.get('network')
+                mac         = mac    is not None and mac.get('address')
+                if network == source:
+                    message = '%s: detaching device %s, on network %s'
+                    print message % (domain.name(), mac, network)
+                    xml = XTree.tostring(n)
+                    domain.detachDevice(xml)
+                    devices.append((domain, mac, xml))
+    print 'Starting network', network
+    net.create()
+
+if devices:
+    print 'Reattaching devices...'
+    time.sleep(1)
+    for domain, mac, xml in devices:
+        print 'Attaching device', mac,'to domain', domain.name()
+        domain.attachDevice(xml)
+    if iptables:
+        print 'Restoring now iptables....'
+        p = subprocess.Popen(['iptables-restore'], 
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = p.communicate(iptables)
+        if p.returncode:
+            print stdout
+            print >> sys.stderr, stderr
+</coderazzi@gmail.com></pre>
+
+    <p>
+        Note that there will likely be networking issues after restarting the network, due to the way KVM handles the iptable rules. The best way to avoid these issues is to save / restore the iptables around the script call, which is what this script does by default. To avoid the iptables call, use the argument -n. 
+    </p>
+
+</div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+ </div>
+ <script type="text/javascript" src="../../js/coderazzi.js"></script>
+</body>
+</html>

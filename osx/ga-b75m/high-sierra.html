@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>High Sierra on Gigabyte GA-B75M</title>
+ <link rel="stylesheet" type="text/css" href="../../css/global.css">
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+ <meta name="Keywords" content="high sierra hackintosh">
+ 
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../../css/menu.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../../index.htm">Blog</a></li><li class="group"><a href="../../codeartifact-maven/index.htm">Java</a></li><li class="group"><a href="../../python/openapi4aws/index.htm">python</a></li><li class="group"><a href="../../csharp/xmlobjects/index.htm">c#</a></li><li class="group"><a href="../../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="../../cloud/aws/mfa/index.html">net + cloud</a></li><li class="group"><a href="../../linux/debian/troubleshooting.htm">Linux</a></li><li class="group"><a href="../../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="#" class="justtext">Os X</a><ul class="navlist"><li><a href="../../howto/osx/nginx.html">Nginx</a></li><li><a href="../../howto/osx/pg_rails.html">PostgreSQL / Rails</a></li><li class="group"><a href="#" class="justtext">Hackintosh</a><ul class="navlist"><li><a href="../hackintoshing.htm">Hackintosh-ing</a></li><li class="group"><a href="../p5q-e/index.htm">Asus P5Q-E</a></li><li><a href="../p5n7a-vm/index.htm">Asus P5N7A-VM</a></li><li class="group"><a href="#" class="justtext">Gigabyte GA-B75M</a><ul class="navlist"><li><a href="index.html">Os X built</a></li><li><a href="mavericks.html">Mavericks</a></li><li><a href="yosemite.html">Yosemite</a></li><li class="active"><a href="#">High Sierra</a></li></ul></li><li><a href="../hibernation.htm">Sleep/hibernation</a></li></ul></li></ul></li><li class="group"><a href="../../phd/index.htm">PhD</a></li><li class="group"><a href="../../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+ 
+
+<p class="timestamp">5th December 2017</p>  
+<h1>High Sierra on Gigabyte GA-B75M</h1>
+
+	<p>
+		This post describes the steps to install MacOs High Sierra from scratch on my system, described <a href="index.html">here</a>.
+	</p>
+
+	<p>
+		I have installed Mavericks, Yosemite and Sierra, using Unibeast for the first two versions, and Clover for the latest; but, after issues with Sierra, I had installed instead Ubuntu, and the new High Sierra install is therefore from scratch, not a OsX upgrade.
+	</p>
+
+	<p>
+		What in the past had been a interesting computer experiment, it is now decidely an almost too simple installation procedure. As <i>special</i> steps I just modified the proposed config.plist from Clover Configurator with the following values:<ul>
+		<li>cpuid: 0x0306a0, for my Ivy Bridge i7 3770 cpu</li>
+		<li>Set the key AppleIntelCPUPM to true</li>
+		<li>For my gigabyte board, set the AppleRTC key to true as well.</li></ul>
+	</p>
+
+	<p>
+		I do not even now if whithout these changes I would have ended with a working Hackintosh! In any case, I can start MacOS using UEFI
+	</p>
+
+	<p>
+		The result is not a working proposal. All works, including sound, that never did in the past. It is true that the sound backside connectors are non-functionning, and I need to use the speaker jack, but all considered, I am fine with it. It goes to sleep nicely, although it requires well overy 30 seconds to accomplish it; afterwards, it wakes up easily. 
+	</p>
+	<p>
+		However, if I let the computer on its own, the day after I find a switched on computer with a blanck screen, and checking the logs show me a dead system: why it switches back to life, but does not really recover? It sounds to me, remotely, like something related to <a href="http://coderazzi.net/osx/hibernation.htm">hibernation</a>: that is, system goes to sleep; after some time, the system wakes up to do a proper hibernation, but then, for some reason, it fails.
+	</p>
+	<p>
+		Checking the power management settings <pre>pmset -g</pre>, I find in fact that the hibernatemode is already zero, which should have prevente my whole issue. However, somehow, the sleep image file <i>/var/vm/sleepimage</i> is there.
+		This Apple forum <a href="https://discussions.apple.com/thread/7524823?start=0&tstart=0">discussion</a> shows that an additional step is needed:
+
+		<pre>sudo nvram "use-nvramrc?"=false</pre>
+	</p>
+	<p>		Alas, this step does not solve the issue, so I went back to tuning the power settings:
+		<pre>
+		sudo pmset -a standby 0
+		sudo pmset -a womp 0
+		sudo pmset -a powernap 0
+		sudo pmset -a autopoweroff 0
+		</pre>
+
+		Some explanations:<ul>
+			<li>standby: sets whether to hibernate when a Mac has been asleep for a set period; this writes memory to disk and powers down memory</li>
+			<li>womp: the same as wake for network access in the power settings pane		powernap: the same as power nap in the power settings pane</li>
+			<li>autopoweroff: after sleeping a specifed period, the system will write an hibernation image and go into a lower power chipset sleep</li>
+		</ul>
+
+		These settings solve the issue. However, what I had seen was that the computer was slept for approximately 4.5 hours before waking up dead, and the standbydelay was 10000 (in seconds, less than 3 hours), and the autopoweroffdelay was 28800 (in minutes, 48 hours). So I presume the problem would be related to powernap. In any case, it makes sense letting the standby and autopoweroff settings disabled, once it is decided to disable hibernation.
+	</p>
+
+	<p>The second issue I got is that I cannot hot swap hard drives. <ul>
+		<li>I tried this <a href="https://rampagedev.wordpress.com/more-guides/hot-plugging-to-your-sata-ports">approach</a> but it didn't work.</li>
+		<li>I have two SATA controllers, an Intel chipset and a Marvell 88SE9172. Allegedly, the AHCI_3rdParty_eSATA.kext seems to provide hotswap functionality for this Marvell controller. but that is not the case.</li>
+		<li>What works is having a hard disk inserted in the rack when MacOS starts. It will appear in System Information as not removable, but in fact the drive can be ejected, and hot swapped. </li>
+	<p>
+
+</ul></div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+ </div>
+ <script type="text/javascript" src="../../js/coderazzi.js"></script>
+</body>
+</html>

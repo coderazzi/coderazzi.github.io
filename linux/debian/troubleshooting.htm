@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debian - Troubleshooting</title>
+    <link rel="stylesheet" type="text/css" href="../../css/global.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+    <meta name="Keywords" content="linux, debian, troubleshooting">
+    <meta name="Author" content="Luis M. Pena">
+
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../../css/menu.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../../index.htm">Blog</a></li><li class="group"><a href="../../codeartifact-maven/index.htm">Java</a></li><li class="group"><a href="../../python/openapi4aws/index.htm">python</a></li><li class="group"><a href="../../csharp/xmlobjects/index.htm">c#</a></li><li class="group"><a href="../../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="../../cloud/aws/mfa/index.html">net + cloud</a></li><li class="group"><a href="#" class="justtext">Linux</a><ul class="navlist"><li class="group"><a href="#" class="justtext">Debian</a><ul class="navlist"><li class="active"><a href="#">Troubleshooting</a></li><li><a href="../dual_nic_linux.htm">Dual NIC on Linux</a></li><li><a href="redmine.htm">Install redmine</a></li></ul></li><li class="group"><a href="../centos/centos_hostname_and_dhcp.htm">CentOS</a></li><li class="group"><a href="../../solaris/index.htm">Solaris</a></li><li class="group"><a href="../ubuntu/my_setup.htm">Ubuntu</a></li><li class="group"><a href="../meego/nc10install.html">Meego</a></li><li class="group"><a href="../linuxaswinservice.htm">misc</a></li></ul></li><li class="group"><a href="../../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="../../howto/osx/nginx.html">Os X</a></li><li class="group"><a href="../../phd/index.htm">PhD</a></li><li class="group"><a href="../../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+
+        <p class="timestamp">7th January 2016</p>
+        <h1>Debian - Troubleshooting</h1>
+
+        <h3>apt-update: There is no public key available for the following key ID</h3>
+
+        <pre>sudo apt-get install debian-archive-keyring
+sudo apt-key update</pre>
+
+
+        <h3>Upgrade Debian Linux system from Wheezy to Jessie stable release</h3>
+
+        <p>Just extracted from <a href="http://linuxconfig.org/how-to-upgrade-debian-linux-system-from-wheezy-to-jessie-stable-release">linuxconfig.org</a>:</p>
+<pre>apt-get update
+apt-get upgrade -y
+apt-get dist-upgrade -y
+sed -i 's/wheezy/jessie/g' /etc/apt/sources.list
+apt-get update
+apt-get upgrade -y
+apt-get dist-upgrade -y
+reboot</pre>
+
+    </div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+ </div>
+ <script type="text/javascript" src="../../js/coderazzi.js"></script>
+</body>
+</html>

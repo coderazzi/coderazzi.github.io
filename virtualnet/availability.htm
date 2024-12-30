@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>VirtualNet: network simulation with JavaRMI.
+ Availability</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+ <link rel="stylesheet" type="text/css" href="../css/global.css">
+ <meta name="Description" content="VirtualNet">
+ <meta name="Keywords" content="java RMI network simulation">
+
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="../css/global.css">
+ <link rel="stylesheet" type="text/css" href="../css/site.css">
+ <link rel="stylesheet" type="text/css" href="../css/menu.css">
+ <meta name="Author" content="Luis M. Pena">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div id="container">
+  <div id="menu" class="wsmMenu"><div class="navcontainer"><ul class="navlist"><li class="group"><a href="../index.htm">Blog</a></li><li class="group"><a href="#" class="justtext">Java</a><ul class="navlist"><li><a href="../codeartifact-maven/index.htm">AWS+Maven</a></li><li class="group"><a href="../openapi4aws/index.htm">OpenAPI4AWS</a></li><li class="group"><a href="../tablefilter/index.html">Table filter</a></li><li><a href="../idldepend/index.htm">IdlDepend</a></li><li class="group"><a href="#" class="justtext">VirtualNet</a><ul class="navlist"><li><a href="index.htm">Overview</a></li><li class="active"><a href="#">Availability</a></li><li><a href="packages.htm">Packages</a></li><li><a href="interface.htm">Interface</a></li><li><a href="localExample.htm">Local example</a></li><li><a href="rmiExample.htm">RMI example</a></li><li><a href="executables.htm">Executables</a></li><li><a href="versions.htm">Versions</a></li></ul></li><li><a href="../virtualnet2/index.htm">VirtualNet2</a></li><li><a href="../phd/index.htm">Sensei</a></li><li><a href="../cmdlinker/index.htm">CmdLinker</a></li><li><a href="../filesplit/index.htm">FileSplit</a></li><li><a href="../glassedpane/index.html">GlassedPane</a></li><li><a href="../menu/index.htm">Menu Applet</a></li><li><a href="../splitimage/index.htm">SplitImage</a></li></ul></li><li class="group"><a href="../python/openapi4aws/index.htm">python</a></li><li class="group"><a href="../csharp/xmlobjects/index.htm">c#</a></li><li class="group"><a href="../javascript/dominosa/dominosa.html">javascript</a></li><li class="group"><a href="../cloud/aws/mfa/index.html">net + cloud</a></li><li class="group"><a href="../linux/debian/troubleshooting.htm">Linux</a></li><li class="group"><a href="../misc/obsidian/obsidian.html">Misc</a></li><li class="group"><a href="../howto/osx/nginx.html">Os X</a></li><li class="group"><a href="../phd/index.htm">PhD</a></li><li class="group"><a href="../books/2017/index.htm">Just words</a></li></ul></div></div>
+  <div id="body" class="wsmContent">
+   <div id="header"><div>&nbsp;</div></div>
+   <div id="content">
+
+ <p class="timestamp">14th August 1997</p>  
+ <h1>VirtualNet (over RMI)</h1>
+ <h2>Availability</h2>
+
+ <p>The virtual net application is provided in its source form. The
+ documentation can be generated using javadoc.</p>
+
+ <p>The application has not been fully tested; if you find any bug,
+ please let me known. If you modify any of the files, I would like
+ to enjoy your improvements: please let me know about the
+ changes.</p>
+
+ <p>Finally, the application has been written using JDK 1.1, and
+ tested with the 1.1.3 version. It won't work with JDK 1.0</p>
+
+ <ul type="square">
+  <li><a href="vnetjava.zip">vnetjava.zip</a> (57 KB): the java
+  files (they are directly unzipped in a directory called
+  <em>vnet</em>). With this files is possible to generate the
+  documentation and the library file.</li>
+
+  <li><a href="vnetdoc.zip">vnetdoc.zip</a> (75 KB): the
+  documentation (it has been generated form the java files using
+  <em>javadoc</em>)</li>
+
+  <li><a href="vnetjar.zip">vnetjar.zip</a> (95 KB): the final
+  library (it was generated with the -0 option, and zipped
+  later)</li>
+ </ul>
+
+ <p>If you get the <em>java</em> files, you will have to generate
+ the <em>class</em> files using <em>javac</em>. In addition, it is
+ needed to generate the stubs and skeleton for the RMI servers. To
+ do that, from the parent directory where you have unzipped the
+ <em>zip</em> file, execute:</p>
+ <pre>
+rmic -dstub . -dskel . vnet.remote.HostImpl
+rmic -dstub . -dskel . vnet.remote.VirtualNetRemote
+</pre>
+
+ <p>If you don't generate now the <em>jar</em> file, you need to
+ modify the <em>classpath</em> to include the directory parent
+ where the <em>class</em> files have been generated. For example,
+ if the <em>java</em> and <em>class</em> files are in the directory
+ <em>vnet</em> under the directory <em>Java</em>, the
+ <em>classpath</em> should be something like:</p>
+ <pre>
+CLASSPATH=.;f:\java\lib\classes.zip;f:\java
+</pre>
+
+ <p>If you get the <em>vnetjar.zip</em> file, it is needed to unzip
+ it to any directory, and include the file <em>vnet.jar</em> in the
+ <em>classpath</em>. For example, my <em>classpath</em> is, under
+ Windows 95:</p>
+ <pre>
+CLASSPATH=.;f:\java\lib\classes.zip;f:\java\virtualnet\vnet.jar
+</pre>
+ </div>
+   <div id="copyright">Copyright (c) Luis M. Pena  -  lu@coderazzi.net</div> 
+  </div>
+ </div>
+ <script type="text/javascript" src="../js/coderazzi.js"></script>
+</body>
+</html>
