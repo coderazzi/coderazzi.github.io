@@ -24,6 +24,54 @@
    <div id="header"><div>&nbsp;</div></div>
    <div id="content">
 
+    <p class="blog-entry"><span class="blog-entry-date">31st December 2024</span>Blog hosting</p>
+
+    <p>
+        <img src="images/blog.png" alt="Blog icon" class="blog">After my previous entry on blog hosting, I started looking for alternatives. My blog is static 
+        -I have my own dynamic generator-, so <a href="https://pages.github.com/">Github Pages</a> is definitely an option. 
+        Mostly when the other usage I have for my VPS is hosting git repositories, probably a match for Github :-)
+    </p>
+
+    <p>
+        The step is easy enough, just create a Github repository with my github' user name and suffix <b>.github.io</b>, 
+        so, in my case: <b>coderazzi.github.io</b>.  The site will be automatically visible as <b>https://coderazzi.github.io</b>
+    </p>
+    <p>
+        The produced website is not just a link to the HTML pages in the repository. 
+        Under the hood, Github sets up a job to build a website based on Jekyll, then uploads the produced artifact. 
+        To disable this, add a .nojekyll page to the repository root.
+    </p>
+    <p>
+        It is possible to see what GitHub is doing with the page at the 
+        <a href="https://github.com/coderazzi/coderazzi.github.io/actions">actions</a> page.
+         When changes are pushed to the repository, a new entry will appear here, with queue status. 
+         For my pages, it requires around 28 seconds for the deployment process
+    </p>
+    <p>
+        Now, I would like to use my own custom domain. Again, this is easy enough: go to user's settings, 
+        choose Pages and validate the associated domain; in my case, coderazzi.com. 
+        This requires adding a TXT record on your domain, as specified in the validation pages.
+    </p>
+    <p>
+        Then got to the repository for the webpage, go to settings / Pages and set the custom domain. 
+        This will obviously fail in a short time, but it creates a commit in the repository, 
+        a new file CNAME that just contains the given custom domain. 
+    </p>
+    <p>
+        The DNS provider must be updated to point to Github's servers. 
+        In the DNS provider, using the following Github's information (
+        <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site">Github Pages</a>), 
+        we add these recordss:
+        <ul>
+            <li>185.199.108.153</li>
+            <li>185.199.109.153</li>
+            <li>185.199.110.153</li>
+            <li>185.199.111.153</li>
+        </ul>
+        Plus a CNAME record www -> coderazzi.github.io.  And that is all, now my blog lives under Github, 
+        one less thing to worry about on my VPS.
+    </p>
+
     <p class="blog-entry"><span class="blog-entry-date">30th December 2024</span>VPS providers</p>
 
     <p><img src="images/vps.png" alt="VPS icon" class="blog">I have been using <a href="https://www.hetzner.com/">Hetzner</a> 
