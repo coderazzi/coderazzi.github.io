@@ -24,6 +24,61 @@
    <div id="header"><div>&nbsp;</div></div>
    <div id="content">
 
+     <p class="blog-entry"><span class="blog-entry-date">17th March 2025</span><a id="upgrading-windows-10-11">Upgrading Windows 10 to 11</a></p>
+
+     <p><img src="images/xtoxi.png" alt="windows 10 to 11 upgrade icon" class="blog">This weekend I decided to upgrade
+         my virtualbox virtual machines running Windows 10 to 11. One failure and one success later, this is my list of steps to
+         do the upgrade:
+     </p>
+
+     <ol>
+         <li>Check that your processor is supported! The list of processors is available at
+             <a href="https://learn.microsoft.com/en-us/windows-hardware/design/minimum/supported/windows-11-24h2-supported-amd-processors">this microsoft site</a>;
+             I did the whole setup for my Macbook Pro from 2017, just to get frustrated at the end because
+             the Intel i7-7700HQ is not supported</li>
+         <li>Update Windows 10, install all latest updates.</li>
+         <li>As a safety measure, clone your virtual machine. In virtualbox, when cloning,
+             check the two checkboxes for keeping disk names and hardware UUIDs.</li>
+         <li>Migrate your MBR partition to GPT. The detailed guide is
+             <a href="https://www.windowscentral.com/how-convert-mbr-disk-gpt-move-bios-uefi-windows-10">here</a>
+            <ol>
+                <li>Verify if this migration is required: Open Computer management / disk management. Select the Windows disk (usually Disk 0),
+                    right click it and select Properties / Volumes.  If this is already GPT, no migration required.</li>
+                <li>Open Settings / Update & Security / Recovery, and select Advanced start-up, then Restart now. </li>
+                <li>This brings you to a window: select Recovery / Advanced Options / Command prompt:
+                    It will restart the virtual machine, but directly to a window to select your command prompt,
+                    where the password is required.
+                    <ol>
+                        <li>enter: <code>mbr2gpt /validate</code></li>
+                        <li>if validation is completed successfully, enter: <code>mbr2gpt /convert</code>.
+                            This takes very short time. In my case, it was completed with messages:
+                            <code>Conversion completed successfully.....Failed to update ReAgent.xml</code>.
+                            This is a warning, we can recover this later.
+                        </li>
+                        <li>Close the terminal window, then turn off your PC</li>
+                    </ol>
+                </li>
+            </ol>
+         </li>
+         <li>Open Virtualbox' machine settings, System, check the box <b>Enable EFI (special OSes only)</b>, and start the machine.
+             Some errors will be visualized, but start with proceed without issues; For double-checking,
+             go to Open Computer management / disk management. Select the Windows disk (usually Disk 0),
+             right click it and select Properties / Volumes.  It should show now Partition style: <b>GUID Partition Table (GPT)</b>
+         </li>
+         <li>Shutdown not the machine, and <a href="https://www.microsoft.com/en-us/software-download/windows11">download</a> Windows 11:
+             We need the ISO file (download Windows 11 Disk Image (ISO) for x64 devices), that is a 5.4 Gb download
+         </li>
+         <li>Attach the ISO to the virtual machine. Open settings in virtualbox for this virtual machine.
+             <ul>
+                <li>In system, ensure that TPM is enabled, v2.0</li>
+                 <li>In storage, add an optical drive, add the downloaded Iso file</li>
+             </ul>
+         </li>
+         <li>Start again the virtual machine, go to the Windows 11 drive, and start the installation</li>
+         <li>After migration, ensure that recovery works fine by issuing: <code>reagentc /enable</code></li>
+     </ol>
+
+
      <p class="blog-entry"><span class="blog-entry-date">10th March 2025</span><a id="aws-security-certification-2025">Specialty AWS Certification</a></p>
 
      <p><img src="images/aws-security-certification.png" alt="aws security certification icon" class="blog">After
