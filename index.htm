@@ -24,83 +24,115 @@
    <div id="header"><div>&nbsp;</div></div>
    <div id="content">
 
-     <p class="blog-entry"><span class="blog-entry-date">17th March 2025</span><a id="brick">Lovely brick</a></p>
+     <p class="blog-entry"><span class="blog-entry-date">26th March 2025</span><a id="ml-1630-macos">Unsupported printers in MacOS</a></p>
 
-     <p><img src="images/macpro_brick.png" alt="bricked laptop" class="blog">My 2017 MacbookPro stopped having a quality life last Summer.</p>
-     <p>At that moment, it could not bend any more the screen at a proper angle, rendering it obsolete for most situations.</p>
-     <p>After a replacement for a younger Macbook Pro M3, it went to rest to a drawer with good conditions but few amenities.</p>
-     <p>Eight months later, a second life was proposed in the shape of an external monitor, keyboard and mouse.
-         This situation highlights the unfairness associated to these integrated systems: the screen, with all its
-         Retina features, must remain now hidden forever, the lovely touchpad will no more handle any gestures,
-         and the keyboard, that faulty butterfly keyboard, will never repeat anymore key touches at will.</p>
-
-     <p>In return, I can use a proper macOS environment, limited now to Ventura, so I have now nine months, at best,
-         to enjoy in safety this machine, as 2025 will be the last year that Ventura receive security updates.</p>
-     <p>I have in the laptop a virtual machine running Windows 10 through virtualbox. I tried today to migrate it to
-         Windows 11, but its Intel i7-7700HQ CPU is not supported.</p>
-     <p>This is essentially a beautiful brick; the nicest Macbook pro so far built, a lovely expression of form over
-         function, and still very capable. But with too important issues, a screen that switches off when properly opened,
-         a battery asking for a difficult replacement, and an operating system added to the list of forgotten releases. </p>
-     <p>And make no mistake, the main drawback is the software support. And yes, Linux will be waiting with open arms,
-         but my experience has been always to use Linux on the desktop, macOS on the laptops.</p>
-     <p>To be continued....</p>
-
-
-
-     <p class="blog-entry"><span class="blog-entry-date">17th March 2025</span><a id="upgrading-windows-10-11">Upgrading Windows 10 to 11</a></p>
-
-     <p><img src="images/xtoxi.png" alt="windows 10 to 11 upgrade icon" class="blog">This weekend I decided to upgrade
-         my virtualbox virtual machines running Windows 10 to 11. One failure and one success later, this is my list of steps to
-         do the upgrade:
+     <p><img src="images/ml-1630.png" alt="ml-1630 printer" class="blog">I have an old printer, a nice Samsung ML-1630;
+         I use it infrequently, but it's essential when I do. I do not keep a exact recollection of the moment I bought it,
+         but that would have been in 2008 or 2009. In 2019 I changed the toner, and in 2020, during the pandemic,
+         my wife used it a lot, so I bought another toner which still remains unopened.
      </p>
 
+     <p>
+         It is a USB printer that is connected when needed to my desktop computer, running Ubuntu 24.04;
+         I wanted to connect it to my new/alternative desktop, a Mac Mini M4, but alas, it lacks driver support.
+         Trying to use older drivers, or drivers for other Samsung printers, didn't work out.
+     </p>
+
+     <p>My solution is to have a virtual machine running debian, sharing the printer, which becomes available as a
+         network printer. I tried first to use UTM, but the associated virtual machine could not see the printer.
+         It seems like VMWare Fusion does not support headless virtual machines easily, so I finally used virtualbox.
+         The steps required are as follows:</p>
+
      <ol>
-         <li>Check that your processor is supported! The list of processors is available at
-             <a href="https://learn.microsoft.com/en-us/windows-hardware/design/minimum/supported/windows-11-24h2-supported-amd-processors">this microsoft site</a>;
-             I did the whole setup for my Macbook Pro from 2017, just to get frustrated at the end because
-             the Intel i7-7700HQ is not supported</li>
-         <li>Update Windows 10, install all latest updates.</li>
-         <li>As a safety measure, clone your virtual machine. In virtualbox, when cloning,
-             check the two checkboxes for keeping disk names and hardware UUIDs.</li>
-         <li>Migrate your MBR partition to GPT. The detailed guide is
-             <a href="https://www.windowscentral.com/how-convert-mbr-disk-gpt-move-bios-uefi-windows-10">here</a>
-            <ol>
-                <li>Verify if this migration is required: Open Computer management / disk management. Select the Windows disk (usually Disk 0),
-                    right click it and select Properties / Volumes.  If this is already GPT, no migration required.</li>
-                <li>Open Settings / Update & Security / Recovery, and select Advanced start-up, then Restart now. </li>
-                <li>This brings you to a window: select Recovery / Advanced Options / Command prompt:
-                    It will restart the virtual machine, but directly to a window to select your command prompt,
-                    where the password is required.
-                    <ol>
-                        <li>enter: <code>mbr2gpt /validate</code></li>
-                        <li>if validation is completed successfully, enter: <code>mbr2gpt /convert</code>.
-                            This takes very short time. In my case, it was completed with messages:
-                            <code>Conversion completed successfully.....Failed to update ReAgent.xml</code>.
-                            This is a warning, we can recover this later.
-                        </li>
-                        <li>Close the terminal window, then turn off your PC</li>
-                    </ol>
-                </li>
-            </ol>
+         <li>Create a virtual machine specifying a debian 12 ISO, using the unattended installation process:
+             enter your username, password and domain, select Guest additions, and create it with 512 Mb memory,
+             4 Gb disk space, 1 core, with EFI enabled.</li>
+
+         <li>Afterwards, when the machine is complete, specify a folder as shared directory path (vm-shared, ie.)
+             mounted on <b>/mnt/vm-shared</b>, auto-mount, make permanent. This step is optional, my initial idea was
+             to create PDF files in this folder, then send them to the printer with an SSH command.</li>
+
+         <li>In addition, change networking from NAT to Bridge adapter.</li>
+
+         <li>Start the USB printer, connected to the host. In Virtualbox / USB, add under USB device filters the printer;
+             all the values will be automatically filled in: remove all except Name, Vendor Id and Product Id. In remote,
+             select ANY.</li>
+
+         <li>MacOS will ask if you want to allow virtualbox to use the printer; answer Always Allow.</li>
+
+         <li>Start now the virtual machine, and enter as root user</li>
+
+         <li>I found that the unattended installation does not respect the hostname given to the machine, and it uses
+             <code>vbox</code> by default.
+             To edit it, open <code>/etc/hostname</code> and <code>/etc/hosts</code> and replace in both
+             the existing name (vbox) with the correct one.</li>
+
+         <li>The virtual machine is using DHCP; it is convenient to have it static. You need to find the current IP
+             address, and the gateway. To get the IP address, just enter: <pre>ip addr show</pre>. To get the gateway:
+             <pre>ip route show 0.0.0.0/0 dev enp0s8 | cut -d\  -f3/</pre>
          </li>
-         <li>Open Virtualbox' machine settings, System, check the box <b>Enable EFI (special OSes only)</b>, and start the machine.
-             Some errors will be visualized, but start with proceed without issues; For double-checking,
-             go to Open Computer management / disk management. Select the Windows disk (usually Disk 0),
-             right click it and select Properties / Volumes.  It should show now Partition style: <b>GUID Partition Table (GPT)</b>
+
+         <li> Now edit the file <code>/etc/network/interfaces</code>, which should look like:
+<pre>source /etc/network/interfaces.d/*
+auto lo
+iface lo inet loopback
+
+auto enp0s8
+iface enp0s8 inet static
+	address 192.168.1.128/24
+	gateway 192.168.1.254
+</pre>
          </li>
-         <li>Shutdown not the machine, and <a href="https://www.microsoft.com/en-us/software-download/windows11">download</a> Windows 11:
-             We need the ISO file (download Windows 11 Disk Image (ISO) for x64 devices), that is a 5.4 Gb download
+         <li>Now we need to restart networking, remove the DHCP client, install sudo, generic printer drivers and the printer subsystem, and
+             enable full access from anywhere>
+<pre>
+systemctl restart networking
+update-rc.d -f dhcpd remove
+
+apt-get install sudo
+usermod -aG sudo coderazzi
+
+apt install cups printer-driver-all  #install drivers and printing subsystem
+cupsctl --remote-any --remote-admin  # enable full access to cups without authorization
+
+cd /etc/cups
+grep -v Require cupsd.conf > cupsd.conf.norequire
+mv cupsd.conf cupsd.conf.original
+mv cupsd.conf.norequire cupsd.conf
+systemctl restart cups
+</pre>
          </li>
-         <li>Attach the ISO to the virtual machine. Open settings in virtualbox for this virtual machine.
+
+         <li>Now we add the printer to the virtual machine, using the CUPS web interface; on the host machine, enter the
+             IP address and port 631 in a browser. In my case: <code>https://192.168.1.128:631/admin</code>  MacOS will issue
+             a warning on the self signed certificate, just go ahead with it.</li>
+
+         <li>Go to <b>Add printer</b>, select the printer (Samsung ML-1630 series) and follow the whole setup.
+             <b>IMPORTANT</b>: add it as shared</li>
+
+         <li>In the virtual machine, you can test the whole setup by printing a PDF file:
+<pre>
+lpstat -p -d                   # this will list all the printers
+lpoptions -d  Samsung_ML-1630  # set the printer as default
+lp PDF_file
+</pre>
+         </li>
+
+         <li>In MacOS, open the system settings, and go to Printers, add Printer. Two printers should appear; in my case:
              <ul>
-                <li>In system, ensure that TPM is enabled, v2.0</li>
-                 <li>In storage, add an optical drive, add the downloaded Iso file</li>
+                 <li>Samsung ML-1630 Series (kind: usb)</li>
+                 <li>Samsung ML-1630 @ vm hostname (kind: Bonjour shared)</li>
              </ul>
          </li>
-         <li>Start again the virtual machine, go to the Windows 11 drive, and start the installation</li>
-         <li>After migration, ensure that recovery works fine by issuing: <code>reagentc /enable</code></li>
+
+         <li>Select the second option, and use it as Generic Postscript Printer. </li>
      </ol>
 
+     <p>And that is all! Mind you, this is not a magical solution: it is equivalent to have a 4 Gb driver,
+         consuming 512 Mb memory and 1 cpu full time: What I do is stopping the VM, saving the state.
+         Then, you can print as many pages as required, they will go to the pool (in MacOS).
+         Whenever the VM is restarted, the pool will be printed.
+     </p>
 
      <p class="blog-entry"><span class="blog-entry-date">10th March 2025</span><a id="aws-security-certification-2025">Specialty AWS Certification</a></p>
 
