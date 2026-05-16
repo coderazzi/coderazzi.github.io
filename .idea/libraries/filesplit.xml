@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="filesplit">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/filesplit/SplitFile.zip!/" />
+      <root url="jar://$PROJECT_DIR$/filesplit/SplitFile.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

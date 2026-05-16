@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="cmdlinker">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/cmdlinker/cmdlinker-0.98.jar!/" />
+      <root url="jar://$PROJECT_DIR$/cmdlinker/cmdlinker-0-97.zip!/" />
+      <root url="jar://$PROJECT_DIR$/cmdlinker/cmdlinker-0-97.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

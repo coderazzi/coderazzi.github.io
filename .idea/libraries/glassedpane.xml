@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="glassedpane">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/glassedpane/glasspane-1-0-0.zip!/" />
+      <root url="jar://$PROJECT_DIR$/glassedpane/example.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

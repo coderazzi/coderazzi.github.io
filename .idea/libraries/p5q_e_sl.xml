@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="p5q-e-sl">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/osx/p5q-e/snowleopard/p5q-e-sl.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

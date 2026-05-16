@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="xmlobjects">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/csharp/xmlobjects/xmlobjects-1-0.zip!/" />
+      <root url="jar://$PROJECT_DIR$/csharp/xmlobjects/xmlobjects-1-1.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

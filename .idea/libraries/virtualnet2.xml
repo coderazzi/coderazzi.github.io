@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="virtualnet2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/virtualnet2/vnet2user.jar!/" />
+      <root url="jar://$PROJECT_DIR$/virtualnet2/counter.jar!/" />
+      <root url="jar://$PROJECT_DIR$/virtualnet2/vnet2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/virtualnet2/counter.zip!/" />
+      <root url="jar://$PROJECT_DIR$/virtualnet2/vnet2.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="EFIupdaterMacMini">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/linux/macmini2006/EFIupdaterMacMini.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

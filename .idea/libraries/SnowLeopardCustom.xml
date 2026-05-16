@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="SnowLeopardCustom">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/osx/p5n7a-vm/SnowLeopardCustom.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

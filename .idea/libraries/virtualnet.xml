@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="virtualnet">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/virtualnet/vnetexrmi.zip!/" />
+      <root url="jar://$PROJECT_DIR$/virtualnet/vnetexloc.zip!/" />
+      <root url="jar://$PROJECT_DIR$/virtualnet/vnetjar.zip!/" />
+      <root url="jar://$PROJECT_DIR$/virtualnet/vnetdoc.zip!/" />
+      <root url="jar://$PROJECT_DIR$/virtualnet/vnetjava.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

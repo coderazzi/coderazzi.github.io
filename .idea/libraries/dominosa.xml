@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="dominosa">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/javascript/dominosa/dominosa.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
